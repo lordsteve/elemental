@@ -1,4 +1,4 @@
-import el from '../const/elements';
+import el from '@elements';
 
 type RequestData = { [key: string]: string | boolean | number };
 

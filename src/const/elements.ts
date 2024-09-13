@@ -1,6 +1,6 @@
-import CookieJar from "../services/cookieJar";
-import StorageBox from "../services/storageBox";
-import PathNames from "./pathNames";
+import CookieJar from "@services/cookieJar";
+import StorageBox from "@services/storageBox";
+import PathNames from "@const/pathNames";
 
 type FormValues = { [key: string]: string };
 

@@ -1,5 +1,5 @@
 import mysql from 'mysql';
-import Model from '../../models/model';
+import Model from '@models/model';
 
 export default class Service {
     static query: string;

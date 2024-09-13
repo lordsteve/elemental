@@ -1,12 +1,12 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import { QueryBuilder, Service } from './services/database';
+import { QueryBuilder, Service } from '@services/database';
 
 import fs from 'fs';
 import http from 'http';
 import path from 'path';
 
-import { SessionStorage, User } from './models';
-import Security from './services/security';
+import { SessionStorage, User } from '@models';
+import Security from '@services/security';
 
 require('dotenv').config();
 

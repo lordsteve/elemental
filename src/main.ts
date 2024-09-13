@@ -1,5 +1,5 @@
-import el from './const/elements';
-import { get, getHtml, initLoader } from './services/request';
+import el from '@elements';
+import { get, getHtml, initLoader } from '@services/request';
 
 initLoader();
 getHtml<NodeListOf<HTMLElement>>('/views/main.html')
