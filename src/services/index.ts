@@ -1,10 +1,14 @@
+import CookieJar from "./cookieJar";
 import request from "./request";
-import cookieJar from "./cookieJar";
-import storageBox from "./storageBox";
+import StorageBox from "./storageBox";
+
+export { default as CookieJar } from "./cookieJar";
+export { default as request } from "./request";
+export { default as StorageBox } from "./storageBox";
 
 const services = {
+    CookieJar,
     request,
-    cookieJar,
-    storageBox
+    StorageBox
 };
 export default services;

@@ -1,7 +1,6 @@
 import CookieJar from "../services/cookieJar";
 import StorageBox from "../services/storageBox";
 import PathNames from "./pathNames";
-import { get } from "../services/request";
 
 type FormValues = { [key: string]: string };
 
@@ -68,8 +67,8 @@ export default class El {
             let spinner = document.createElement('spinner');
             loader = document.createElement('loader') as HTMLElement;
             loader.appendChild(spinner);
+            document.body.appendChild(loader);
         }
-        document.body.appendChild(loader);
         return loader;
     } set loader(loader: HTMLElement) {
         this.loader = loader;

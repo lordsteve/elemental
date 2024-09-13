@@ -73,10 +73,23 @@ export async function get<T = Response>(path: string, data: RequestData | null =
     return await request<T>('GET', path, data);
 }
 
-export async function getHtml(path: string, data: RequestData | null = null) {
+/**
+ * An HTML view could come in as either one HTMLElement
+ * or a NodeList of HTMLElements. If you do not specificy
+ * one or the other, the type will be inferred as
+ * HTMLElement | NodeListOf<HTMLElement> and your code
+ * will have to account for both cases. HTMLElement
+ * subclasses such as HTMLDivElement, HTMLSpanElement,
+ * etc. are also valid types.
+ */
+export async function getHtml<T extends HTMLElement | NodeListOf<HTMLElement>>(path: string, data: RequestData | null = null) {
     return await request('GET', path, data, false)
         .then(response => response.text())
-        .then(html => new DOMParser().parseFromString(html, 'text/html').body.childNodes);
+        .then(html => { 
+            const ele = new DOMParser().parseFromString(html, 'text/html').body.childNodes;
+            var result = ele.length === 1 ? ele[0] as T : ele as NodeList;
+            return result as T;
+        });
 }
 
 export async function post<T = Response>(path: string, data: RequestData | object | null = null) {
