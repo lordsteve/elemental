@@ -32,7 +32,7 @@
     "build:watch": "concurrently \"npm run build:watch:server\" \"npm run build:watch:client\"",
     "watch:html": "npm-watch html",
     "prod": "npm run build && node ./server/comp/main.js",
-    "dev": "env-cmd -f ./.env concurrently \"npm run build:watch\" \"npm run watch:html\" \"nodemon ./server/comp/main.js\" \"cd www && reload -p %RELOAD_PORT% -b\""
+    "dev": "env-cmd -f ./.env concurrently \"npm run build:watch\" \"npm run watch:html\" \"nodemon ./server/comp/main.js\" \"reload -p %RELOAD_PORT% -b -d www\""
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1",

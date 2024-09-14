@@ -1,5 +1,5 @@
 import Service from './service';
-import Model from '@models/model';
+import Model from '../../models/model';
 
 export default class QueryBuilder {
     private static buildChain<T extends Model>() {

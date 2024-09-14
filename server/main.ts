@@ -1,27 +1,23 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import { QueryBuilder, Service } from '@services/database';
+import Service from './services/database/service';
 
 import fs from 'fs';
 import http from 'http';
 import path from 'path';
 
-import { SessionStorage, User } from '@models';
-import Security from '@services/security';
+import SessionStorage from './models/sessionStorage';
+import Security from './services/security';
 
 require('dotenv').config();
 
 const server = http.createServer((req: IncomingMessage, res: ServerResponse) => {
+    console.log(req.url); 
     if (req.url === '/csrf-token') {
         const token = Security.getCSRFToken();
 
         Service.insert<SessionStorage>([
             new SessionStorage(new Date(), 'test', token)
         ]);
-
-        QueryBuilder.select<SessionStorage>('token').whereAnd([
-            { column: 'name', value: 'test' },
-            { column: 'token', value: token }
-        ]).join<SessionStorage, User>().execute();
         
         res.writeHead(200, { 'Content-Type': 'text/plain' });
         res.end(token);

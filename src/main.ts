@@ -7,11 +7,12 @@ getHtml<NodeListOf<HTMLElement>>('/views/main.html')
         main.forEach((ele) => {
             el.body.appendChild(ele);
         });
-        el.buttons.forEach((button) => {
-            button.onclick = () => {
-                console.log('Hello, World!');
-                get('https://jsonplaceholder.typicode.com/posts')
-            };
-        });
+        const button = el.buttons.id('btn');
+        if (!button) return;
+
+        button.onclick = () => {
+            console.log('Hello, World!');
+            get('https://jsonplaceholder.typicode.com/posts')
+        };
         el.title.textContent = 'Hello, World!';
     });

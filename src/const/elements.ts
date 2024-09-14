@@ -1,8 +1,16 @@
+import PathNames from "@const/pathNames";
 import CookieJar from "@services/cookieJar";
 import StorageBox from "@services/storageBox";
-import PathNames from "@const/pathNames";
 
 type FormValues = { [key: string]: string };
+declare global {
+    interface NodeListOf<TNode extends Node> extends NodeList {
+        /**
+         * Returns a single element from the node list that matches the id 
+         */
+        id(id: string): TNode | undefined;
+    }
+}
 
 export default class El {
     private static getElement = <T extends HTMLElement = HTMLElement>(selector: string) => {
@@ -21,6 +29,9 @@ export default class El {
             document.body.appendChild(el);
             els = document.querySelectorAll<T>(selector);
             if (!els) throw new Error(`Could not create node list with selector: ${selector}`);
+        }
+        els.id = (id: string) => {
+            return [...els].find(el => el.id === id);
         }
         return els;
     }
