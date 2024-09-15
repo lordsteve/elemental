@@ -1,21 +1,22 @@
+import 'module-alias/register';
+
 import { IncomingMessage, ServerResponse } from 'http';
-import Service from './services/database/service';
+import DatabaseService from 'services/database/service';
 
 import fs from 'fs';
 import http from 'http';
 import path from 'path';
 
-import SessionStorage from './models/sessionStorage';
-import Security from './services/security';
+import { SessionStorage } from 'models';
+import { Security } from 'services';
 
 require('dotenv').config();
 
 const server = http.createServer((req: IncomingMessage, res: ServerResponse) => {
-    console.log(req.url); 
     if (req.url === '/csrf-token') {
         const token = Security.getCSRFToken();
 
-        Service.insert<SessionStorage>([
+        DatabaseService.insert<SessionStorage>([
             new SessionStorage(new Date(), 'test', token)
         ]);
         

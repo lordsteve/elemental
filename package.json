@@ -17,13 +17,14 @@
     "because esbuild does not type check, we use tsc to type check the client code without emitting code",
     "we use concurrently to run multiple scripts at once",
     "we use nodemon to restart the server when server code changes",
-    "we use reload to refresh the browser when client code changes",
+    "we use browser-sync to refresh the browser when client code changes",
     "we use npm-watch to copy html and css files when one of them changes",
     "prod script builds the project and runs the server",
     "dev script runs the server, builds the project, watches for changes, and refreshes the browser",
     "env-cmd will allow you to set RELOAD_PORT (and other environment variables) in the .env file"
   ],
   "scripts": {
+    "browser-sync": "env-cmd -x browser-sync start --proxy \"http://$HOST:$PORT\" --serveStatic \"www\" -w --port $RELOAD_PORT",
     "typecheck": "tsc --project ./src/tsconfig.json --noEmit",
     "html": "cp ./src/index.html www && cp -r ./src/views/ ./www/ && esbuild ./src/main.css --bundle --outfile=www/main.css",
     "build": "tsc --project ./server/tsconfig.json && tsc --project ./src/tsconfig.json --noEmit && esbuild src/main.ts --bundle --outfile=www/main.js && npm run html",
@@ -32,23 +33,33 @@
     "build:watch": "concurrently \"npm run build:watch:server\" \"npm run build:watch:client\"",
     "watch:html": "npm-watch html",
     "prod": "npm run build && node ./server/comp/main.js",
-    "dev": "env-cmd -f ./.env concurrently \"npm run build:watch\" \"npm run watch:html\" \"nodemon ./server/comp/main.js\" \"reload -p %RELOAD_PORT% -b -d www\""
+    "dev": "concurrently \"npm run build:watch\" \"npm run watch:html\" \"nodemon ./server/comp/main.js\" \"npm run browser-sync\"",
+    "dev:no-reload": "concurrently \"npm run build:watch\" \"npm run watch:html\" \"nodemon ./server/comp/main.js\""
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
     "@types/mysql": "^2.15.26",
     "@types/node": "^22.5.4",
+    "browser-sync": "^3.0.2",
     "concurrently": "^8.2.2",
     "dotenv": "^16.4.5",
     "env-cmd": "^10.1.0",
-    "esbuild": "^0.23.1",
     "esbuild-plugin-tsc": "^0.4.0",
     "nodemon": "^3.1.4",
     "npm-watch": "^0.13.0",
-    "reload": "^3.3.0",
     "typescript": "^5.5.4"
   },
   "dependencies": {
+    "esbuild": "^0.23.1",
+    "module-alias": "^2.2.3",
     "mysql": "^2.18.1"
+  },
+  "_moduleAliases": {
+    "@server": "./server",
+    "@src": "./src",
+    "models": "./server/comp/models",
+    "controllers": "./server/comp/controllers",
+    "services": "./server/comp/services",
+    "views": "./src/views"
   }
 }
