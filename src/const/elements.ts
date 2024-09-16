@@ -8,7 +8,7 @@ declare global {
         /**
          * Returns a single element from the node list that matches the id 
          */
-        id(id: string): TNode | undefined;
+        id(id: string): HTMLElement;
     }
 }
 
@@ -31,7 +31,9 @@ export default class El {
             if (!els) throw new Error(`Could not create node list with selector: ${selector}`);
         }
         els.id = (id: string) => {
-            return [...els].find(el => el.id === id);
+            const el = [...els].find(el => el.id === id);
+            if (!el) throw new Error(`Element with id "${id}" not found.`);
+            return el;
         }
         return els;
     }
