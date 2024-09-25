@@ -5,17 +5,21 @@ type RequestData = { [key: string]: string | boolean | number };
 export function initLoader() {
     window.fetch = ((oldFetch: typeof window.fetch, input: RequestInfo | URL = '', init?: RequestInit | undefined) => {
         return async (url: RequestInfo | URL = input, options: RequestInit | undefined = init) => {
-            el.csrfToken = await oldFetch('/csrf-token').then(response => response.text());
             el.loader;
-            if (!options) options = {} as RequestInit;
-            options.headers
-                ? options.headers['X-CSRF-TOKEN' as keyof HeadersInit] = el.csrfToken
-                : options = {
-                    ...options,
-                    headers: {
-                        'X-CSRF-TOKEN': el.csrfToken
-                    }
-                };
+            if (options && options.method !== 'GET') {
+                el.csrfToken = await oldFetch('/csrf-token').then(response => response.text());
+                options.headers
+                    ? options.headers['X-CSRF-TOKEN' as keyof HeadersInit] = el.csrfToken
+                    : options = {
+                        ...options,
+                        headers: {
+                            'X-CSRF-TOKEN': el.csrfToken
+                        }
+                    };
+            }
+            if (options && options.headers) options.headers['X-Requested-With' as keyof HeadersInit] = 'Elemental';
+            if (!options) options = { headers: { 'X-Requested-With': 'Elemental' } };
+            if (!options.headers) options.headers = { 'X-Requested-With': 'Elemental' };
             const response = await oldFetch(url, options);
             el.loader.remove();
             return response;

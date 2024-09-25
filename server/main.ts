@@ -1,55 +1,67 @@
 import 'module-alias/register';
 
-import { IncomingMessage, ServerResponse } from 'http';
-import DatabaseService from 'services/database/service';
-
 import fs from 'fs';
 import http from 'http';
 import path from 'path';
 
-import { SessionStorage } from 'models';
+
 import { Security } from 'services';
 
 require('dotenv').config();
 
-const server = http.createServer((req: IncomingMessage, res: ServerResponse) => {
-    if (req.url === '/csrf-token') {
-        const token = Security.getCSRFToken();
-
-        DatabaseService.insert<SessionStorage>([
-            new SessionStorage(new Date(), 'test', token)
-        ]);
-        
-        res.writeHead(200, { 'Content-Type': 'text/plain' });
-        res.end(token);
-
-        return;
+const server = http.createServer((req: http.IncomingMessage, res: http.ServerResponse) => {
+    const { method, headers } = req;
+    let { url } = req;
+    
+    if (method !== 'GET') {
+        let valid = Security.validateCSRFToken(headers['X-CSRF-TOKEN'] as string);
+        if (!valid) {
+            res.statusCode = 403;
+            res.setHeader('Content-Type', 'text/plain');
+            res.end('403 Forbidden');
+        }
     }
 
-    const www = path.join(__dirname, '..', '..', 'www');
+    switch (url) {
+        case '/favicon.ico':
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'text/plain');
+            res.end('404 Not Found');
+            break;
+        case '/csrf-token':
+            const token = Security.getCSRFToken();
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'text/plain');
+            res.end(token);
+            break;
+        default:
+            if (url?.startsWith('/views/') && headers['x-requested-with'] !== 'Elemental') {
+                res.statusCode = 403;
+                res.setHeader('Content-Type', 'text/plain');
+                res.end('403 Forbidden');
+            } else {
+                const www = path.join(__dirname, '..', '..', 'www');
 
-    if (req.url?.endsWith('/')) {
-        req.url = req.url + 'index.html';
-    } else if (req.url !== undefined && findExtension(req.url) === req.url) {
-        req.url = req.url + '/index.html';
+                if (url?.endsWith('/')) {
+                    url = url + 'index.html';
+                } else if (url !== undefined && findExtension(url) === url) {
+                    url = url + '/index.html';
+                }
+
+                try {
+                    const file = fs.readFileSync(path.join(www, url ?? ''));
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', findContentType(findExtension(url ?? '')));
+                    res.end(file);
+                } catch {
+                    res.statusCode = 404;
+                    res.setHeader('Content-Type', 'text/plain');
+                    res.end('404 Not Found');
+                }
+            }
+            break;
     }
 
-    try {
-        fs.accessSync(path.join(www, req.url ?? ''));
-    } catch {
-        res.writeHead(404, { 'Content-Type': 'text/plain' });
-        res.end('404 Not Found');
-        return;
-    }
-
-    const page = fs.readFileSync(path.join(www, req.url ?? ''));
-    if (!page) {
-        res.writeHead(404, { 'Content-Type': 'text/plain' });
-        res.end('404 Not Found');
-        return;
-    }
-    res.writeHead(200, { 'Content-Type': findContentType(findExtension(req.url ?? '')) });
-    res.end(page);
 });
 const port = parseInt(process.env.PORT ?? '8080');
 const host = process.env.HOST ?? 'localhost';

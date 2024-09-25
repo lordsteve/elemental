@@ -11,7 +11,7 @@ export default class QueryBuilder {
             whereIn: this.whereIn<T>,
             whereNotIn: this.whereNotIn<T>,
             join: this.join,
-            execute: this.execute
+            execute: this.execute<T>
         };
     }
     private static transformValue(value: any) {
@@ -98,7 +98,7 @@ export default class QueryBuilder {
         return this.buildChain<T>();
     }
 
-    public static async execute() {
+    public static async execute<T extends Model>(): Promise<T[]> {
         return new Promise(async (resolve, reject) => {
             var closeConnection = false;
             if (!await Service.isConnected()) {

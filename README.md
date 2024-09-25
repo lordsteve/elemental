@@ -4,9 +4,7 @@ This is a boilerplate framework for working with node and Typescript. The intent
 
 On the front end, the idea is to use Typescript to directly manipulate the DOM, and to create an easy way to understand how to do that. That's where the name comes from: manipulating DOM Elements.
 
-This is FAR from a finished project. But I got to the point where I started creating functions to query and minipulate the database and it slowed me to a hault. So this is just a save point in case I severely fuck anything up soon.
-
-Feel free to hop in and help develop this!
+This is FAR from a finished project, so feel free to hop in and help develop this!
 
 Just clone this repo and then
 `npm install`
