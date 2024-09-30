@@ -255,3 +255,26 @@ export default class El {
         }
     }
 };
+
+/**
+* Creates an HTMLElement from a template string
+* @param html The template string
+* @param values The values to be inserted into the template string
+* @returns The HTMLElement
+* @example
+* const el = html`<div>${'Hello World!'}</div>`;
+* document.body.appendChild(el);
+*/
+export function html(html: TemplateStringsArray, ...values: any[]): HTMLElement {
+   let string: string = '';
+   html.forEach((str, i) => string += str + (values[i] ?? ''));
+   const template = document.createElement('template');
+   template.innerHTML = string.trim();
+   return template.content.firstChild as HTMLElement;
+}
+
+export function htmlstring(html: TemplateStringsArray, ...values: any[]): string {
+   let string: string = '';
+   html.forEach((str, i) => string += str + (values[i] ?? ''));
+   return string;
+}

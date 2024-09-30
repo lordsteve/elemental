@@ -4,23 +4,28 @@ import views from '@views';
 
 initLoader();
 
+el.body.appendChild(views.navTemplate);
+views.nav();
 switch (location.pathname) {
     case '/':
-        getHtml<HTMLElement>('/views/nav')
-            .then((nav) => {
-                el.body.appendChild(nav);
-                views.nav();
-            }).then(() =>
-            getHtml<HTMLElement>('/views/home')
-                .then((home) => {
-                    el.body.appendChild(home);
-                    views.home();
-                }));
+        el.body.appendChild(views.homeTemplate('and all the ships at sea'));
+        views.home();
     break;
     default:
-        getHtml<HTMLElement>(location.pathname)
+        getHtml(location.pathname)
             .then((page) => {
-                el.body.appendChild(page);
+                if (page instanceof HTMLElement){
+                    el.body.appendChild(page);
+                } else if (page instanceof NodeList) {
+                    page.forEach((element) => {
+                        el.body.appendChild(element);
+                    });
+                }
+
+                if (el.nav.nextElementSibling === null) {
+                    el.body.appendChild(views.homeTemplate('404 - Page Not Found'));
+                    views.home();
+                }
             });
     break;
 }

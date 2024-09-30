@@ -1,11 +1,17 @@
-import home from '@views/home/index';
-import nav from '@views/nav/index';
+import home from '@views/home/home';
+import homeTemplate from '@views/home/home.template';
+import nav from '@views/nav/nav';
+import navTemplate from '@views/nav/nav.template';
 
-export { default as home } from '@views/home/index';
-export { default as nav } from '@views/nav/index';
+export { default as home } from '@views/home/home';
+export { default as homeTemplate } from '@views/home/home.template';
+export { default as nav } from '@views/nav/nav';
+export { default as navTemplate } from '@views/nav/nav.template';
 
 const views = {
     home,
-    nav
+    homeTemplate,
+    nav,
+    navTemplate
 };
 export default views;

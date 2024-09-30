@@ -48,16 +48,38 @@ const server = http.createServer((req: http.IncomingMessage, res: http.ServerRes
                     url = url + '/index.html';
                 }
 
-                try {
-                    const file = fs.readFileSync(path.join(www, url ?? ''));
-                    res.statusCode = 200;
-                    res.setHeader('Content-Type', findContentType(findExtension(url ?? '')));
-                    res.end(file);
-                } catch {
+                if (url === undefined) {
                     res.statusCode = 404;
                     res.setHeader('Content-Type', 'text/plain');
                     res.end('404 Not Found');
+                } else {
+                    let mainPage: string;
+                    switch (findExtension(url)) {
+                        case 'html':
+                            mainPage = '/index.html';
+                            break;
+                        case 'css':
+                            mainPage = '/main.css';
+                            break;
+                        case 'js':
+                            mainPage = '/main.js';
+                            break;
+                        default:
+                            mainPage = '/index.html';
+                            break;
+                    }
+                    try {
+                        const file = fs.readFileSync(path.join(www, url.startsWith('/views') ? url : mainPage));
+                        res.statusCode = 200;
+                        res.setHeader('Content-Type', findContentType(findExtension(url)));
+                        res.end(file);
+                    } catch {
+                        res.statusCode = 404;
+                        res.setHeader('Content-Type', 'text/plain');
+                        res.end('404 Not Found');
+                    }
                 }
+
             }
             break;
     }
