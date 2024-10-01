@@ -13,29 +13,29 @@ declare global {
 }
 
 export default class El {
-    private static getElement = <T extends HTMLElement = HTMLElement>(selector: string) => {
+    private static getElement = <T extends HTMLElement = HTMLElement>(selector: string): T => {
         let el = document.querySelector<T>(selector);
         if (!el) {
-            el = document.createElement(selector) as T;
-            document.body.appendChild(el);
-        }
-        return el;
-    }
-    private static getElements = <T extends HTMLElement = HTMLElement>(selector: string) => {
-        let els = document.querySelectorAll<T>(selector);
-        if (!els || els.length == 0) {
-            console.error(`Nodes with selector "${selector}" not found. Creating new node list.`);
-            var el = document.createElement(selector) as T;
-            document.body.appendChild(el);
-            els = document.querySelectorAll<T>(selector);
-            if (!els) throw new Error(`Could not create node list with selector: ${selector}`);
-        }
-        els.id = (id: string) => {
-            const el = [...els].find(el => el.id === id);
-            if (!el) throw new Error(`Element with id "${id}" not found.`);
+            throw `Node with selector "${selector}" not found!`;
+        } else {
+            // this will create the bg attribute and use it to set the element's background image
+            if (el.getAttribute('bg'))
+                el.style.backgroundImage = `url(${el.getAttribute('bg')})`;
             return el;
         }
-        return els;
+    }
+    private static getElements = <T extends HTMLElement = HTMLElement>(selector: string): NodeListOf<T> => {
+        let els = document.querySelectorAll<T>(selector);
+        if (!els || els.length == 0) {
+            throw `Nodes with selector "${selector}" not found!`;
+        } else {
+            els.id = (id: string) => {
+                const el = [...els].find(el => el.id === id);
+                if (!el) throw new Error(`Element with id "${id}" not found.`);
+                return el;
+            }
+            return els;
+        }
     }
 
     public static get root() {
@@ -75,6 +75,7 @@ export default class El {
         this.modal = modal;
     }
     public static get loader() {
+        // The loader is a special element that will be created if it is not found
         let loader = document.querySelector('loader');
         if (!loader) {
             let spinner = document.createElement('spinner');
@@ -102,7 +103,7 @@ export default class El {
         this.forms = forms;
     }
     public static get formInputs() {
-        return this.getElements<HTMLInputElement | HTMLTextAreaElement>('form input | form textarea');
+        return this.getElements<HTMLInputElement | HTMLTextAreaElement>('form input, form textarea');
     } set formInputs(formInputs: NodeListOf<HTMLInputElement | HTMLTextAreaElement>) {
         this.formInputs = formInputs;
     }
@@ -125,13 +126,16 @@ export default class El {
     constructor(path: string, private submitted = false) {
         switch (path) {
             case PathNames.HOME:
-                // Do something
+                // Make El behave a certain way according to which page its on
                 break;
             default:
                 break;
         }
 
-        if (this.selectors && this.selectors.length > 0) {
+        if (this.selectors.length > 0) {
+            // this will make selector options toggle on mousedown
+            // which is not the default behavior. This can be deleted
+            // if the default behavior is desired.
             this.selectors.forEach(selector => {
                 selector.onclick = (e) => {
                     e.preventDefault();
@@ -149,6 +153,7 @@ export default class El {
         }
 
         if (this.formInputs && this.submitButton) {
+            // This will disable the submit button if any required inputs are empty
             let requiredInputs = [...this.formInputs].filter(input => input.required);
             let disableSubmitButton = () => {
                 if (this.submitButton)
@@ -164,6 +169,7 @@ export default class El {
                 })(input.oninput?.bind(input));
             });
 
+            // This will disable the submit button and change its text to a spinner when form is submitted
             this.forms.forEach(form => {
                 form.onsubmit = ((oldOnSubmit: typeof form.onsubmit | undefined) => {
                     form.submitButton = form.querySelector<HTMLButtonElement>('button[type="submit"]');
@@ -178,6 +184,7 @@ export default class El {
         }
 
         window.onbeforeunload = ((oldBeforeUnload: typeof window.onbeforeunload | undefined) => {
+            // this will save form values to local storage before the page is unloaded
             return (e) => {
                 if (oldBeforeUnload) oldBeforeUnload.call(window, e);
                 if (this.formInputs.length == 0) return;
@@ -205,6 +212,7 @@ export default class El {
             }
         })(window.onbeforeunload?.bind(window));
         window.onload = ((oldLoad: typeof window.onload | undefined) => {
+            // this will load form values from local storage when the page is loaded
             return (e) => {
                 if (oldLoad) oldLoad.call(window, e);
                 if (this.formInputs.length == 0) return;
@@ -229,10 +237,14 @@ export default class El {
                 // if (description && typeof description === 'string' && description !== '')
                 //     window.tinymce.get('description')?.setContent(description);
 
-                localStorage.clear();
+                StorageBox.remove('formValues');
+                // StorageBox.remove('content');
+                // StorageBox.remove('message');
+                // StorageBox.remove('description');
             }
         })(window.onload?.bind(window));
 
+        // These will eventually have to move to their own view template
         if (this.cookieBanner) {
             if (CookieJar.get<boolean>('cookies-are-cool')) {
                 this.cookieBanner.remove();
@@ -245,13 +257,6 @@ export default class El {
                 if (this.cookieBanner)
                     this.cookieBanner.remove();
             };
-        }
-
-        if (document.querySelectorAll('div, body')) {
-            (document.querySelectorAll('div, body') as NodeListOf<HTMLDivElement> | NodeListOf<HTMLBodyElement>).forEach((div: HTMLDivElement | HTMLBodyElement) => {
-                if (div.getAttribute('bg'))
-                    div.style.backgroundImage = `url(${div.getAttribute('bg')})`;
-            })
         }
     }
 };
@@ -273,6 +278,16 @@ export function html(html: TemplateStringsArray, ...values: any[]): HTMLElement 
    return template.content.firstChild as HTMLElement;
 }
 
+/**
+ * Creates an HTML string from a template string that can be used within
+ * another template string
+ * @param html The template string
+ * @param values The values to be inserted into the template string
+ * @returns The HTML string
+ * @example
+ * const el = html`<div>Hello World! ${ goodbye ? htmlstring`<span>Goodbye World!</span>` : '' }</div>`;
+ * document.body.appendChild(el);
+ **/
 export function htmlstring(html: TemplateStringsArray, ...values: any[]): string {
    let string: string = '';
    html.forEach((str, i) => string += str + (values[i] ?? ''));

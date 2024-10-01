@@ -1,14 +1,15 @@
-import { html, htmlstring } from '@const/elements';
+import { html, htmlstring } from '@services/elements';
 
 const homeTemplate = (
+    heading: string,
     welcome: string | null = null
 ) => {
     welcome = !welcome ? '' : htmlstring`<p>${welcome}</p>`;
 
     return html`
-    <el-home>
+    <el-home class="content-slate">
         <section>
-            <h1>Hello World!</h1>
+            <h1>${heading}</h1>
             ${welcome}
             <button id="btn"><i class="fa-solid fa-download"></i></button>
         </section>

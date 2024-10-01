@@ -1,4 +1,4 @@
-import el from '@elements';
+import el from '@services/elements';
 import { getHtml, initLoader } from '@services/request';
 import views from '@views';
 
@@ -8,9 +8,15 @@ el.body.appendChild(views.navTemplate);
 views.nav();
 switch (location.pathname) {
     case '/':
-        el.body.appendChild(views.homeTemplate('and all the ships at sea'));
+        el.body.appendChild(views.homeTemplate(
+            'It\'s Elemental',
+            'A boilerplate framework for TypeScript web development.'
+        ));
         views.home();
     break;
+    case '/about':
+        el.body.appendChild(views.aboutTemplate);
+        views.about();
     default:
         getHtml(location.pathname)
             .then((page) => {
@@ -23,7 +29,7 @@ switch (location.pathname) {
                 }
 
                 if (el.nav.nextElementSibling === null) {
-                    el.body.appendChild(views.homeTemplate('404 - Page Not Found'));
+                    el.body.appendChild(views.homeTemplate('404', 'Page Not Found'));
                     views.home();
                 }
             });

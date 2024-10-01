@@ -1,4 +1,4 @@
-import el from '@elements';
+import el from '@services/elements';
 
 type RequestData = { [key: string]: string | boolean | number };
 
