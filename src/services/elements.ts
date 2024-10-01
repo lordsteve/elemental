@@ -16,7 +16,7 @@ export default class El {
     private static getElement = <T extends HTMLElement = HTMLElement>(selector: string): T => {
         let el = document.querySelector<T>(selector);
         if (!el) {
-            throw `Node with selector "${selector}" not found!`;
+            throw new Error(`Node with selector "${selector}" not found!`);
         } else {
             // this will create the bg attribute and use it to set the element's background image
             if (el.getAttribute('bg'))
@@ -27,7 +27,7 @@ export default class El {
     private static getElements = <T extends HTMLElement = HTMLElement>(selector: string): NodeListOf<T> => {
         let els = document.querySelectorAll<T>(selector);
         if (!els || els.length == 0) {
-            throw `Nodes with selector "${selector}" not found!`;
+            throw new Error(`Nodes with selector "${selector}" not found!`);
         } else {
             els.id = (id: string) => {
                 const el = [...els].find(el => el.id === id);
