@@ -1,3 +1,5 @@
+import el from '@services/elements';
+
 export default function about() {
-    //noop
+    el.title.textContent = 'About Elemental';
 }

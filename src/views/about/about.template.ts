@@ -1,7 +1,14 @@
-import { html } from "@services/elements";
+import { html, htmlstring } from "@services/elements";
+import sidebarTemplate from "@views/sidebar/sidebar.template";
 
 const about = html`
-    <el-about class="content-slate">
+    <el-about>
+    ${sidebarTemplate({
+        '/':'Home',
+        '/about':'About',
+        '/docs':'Docs'
+    }).outerHTML}
+    <div class="content-slate">
         <section>
             <h1>About Elemental</h1>
             <p>
@@ -11,6 +18,7 @@ const about = html`
                 The concept of Elemental is to use TypeScript to directly manipulate the DOM without the need for learning the syntax of a new framework like Angular or JQuery. Everything you see here will be a native function of either JavaScript or TypeScript (or CSS, I guess; we let it do its thing). This is a great way to learn how to work with TypeScript and the DOM. You can use Elemental as a starting point for your project or as a learning tool.
             </p>
         </section>
+    </div>
     </el-about>`;
 
 export default about;

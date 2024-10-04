@@ -1,4 +1,5 @@
 import { html, htmlstring } from '@services/elements';
+import sidebarTemplate from '@views/sidebar/sidebar.template';
 
 const homeTemplate = (
     heading: string,
@@ -7,12 +8,19 @@ const homeTemplate = (
     welcome = !welcome ? '' : htmlstring`<p>${welcome}</p>`;
 
     return html`
-    <el-home class="content-slate">
-        <section>
-            <h1>${heading}</h1>
-            ${welcome}
-            <button id="btn"><i class="fa-solid fa-download"></i></button>
-        </section>
+    <el-home>
+    ${sidebarTemplate({
+        '/':'Home',
+        '/about':'About',
+        '/docs':'Docs'
+    }).outerHTML}
+        <div class="content-slate">
+            <section>
+                <h1>${heading}</h1>
+                ${welcome}
+                <button id="btn"><i class="fa-solid fa-download"></i></button>
+            </section>
+        </div>
     </el-home>
     `;
 }

@@ -7,5 +7,5 @@ export default function home() {
     button.onclick = () => {
         get('https://jsonplaceholder.typicode.com/posts')
     };
-    el.title.textContent = 'Hello, World!';
+    el.title.textContent = 'Welcome to Elemental!';
 }

@@ -24,7 +24,6 @@ html {
 body {
     display: flex;
     flex-direction: column;
-    align-items: center;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -61,14 +60,12 @@ button:active {
 h1 {
     color: var(--ui-color);
 }
-
 .content-slate {
-    flex-grow: 1;
     display: flex;
+    flex-grow: 1;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    max-width: 1000px;
 }
 .content-slate section {
     display: flex;
@@ -79,12 +76,13 @@ h1 {
     border-radius: 5px;
     box-shadow: var(--md-shadow);
     background-color: white;
+    max-width: 900px;
 }
 
 /* MOBILE FIRST! */
 @media screen and (min-width: 768px) {
     .content-slate {
-        margin: 2rem;
+        margin: 0 2rem;
     }
     .content-slate section {
         padding: 1rem 4rem;
