@@ -9,3 +9,5 @@ This is FAR from a finished project, so feel free to hop in and help develop thi
 Just clone this repo and then
 `npm install`
 `npm run dev`
+
+Elemental is optimized for use with external APIs utilizing the built-in Request service. Should you require your app to directly interface with a database, we recommend using [TypeORM](https://typeorm.io/)
