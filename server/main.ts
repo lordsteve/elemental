@@ -85,8 +85,8 @@ const server = http.createServer((req: http.IncomingMessage, res: http.ServerRes
     }
 
 });
-const port = parseInt(process.env.PORT ?? '8080');
-const host = process.env.HOST ?? 'localhost';
+const port = parseInt(process.env.PORT || '8080');
+const host = process.env.HOST || 'localhost';
 const reloadPort = process.env.RELOAD_PORT;
 server.listen(port, host, () => {
     console.log(`Static server started on http://${host}:${port}.`);
