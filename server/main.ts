@@ -7,7 +7,7 @@ import path from 'path';
 
 import { Security } from 'services';
 
-require('dotenv').config();
+//require('dotenv').config();
 
 const server = http.createServer((req: http.IncomingMessage, res: http.ServerResponse) => {
     const { method, headers } = req;
