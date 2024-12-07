@@ -1,13 +1,10 @@
-import Security from "./security";
-import Database from "./database";
+import Database from "./database/index";
 import Log from "./log";
 
-export { default as Security } from "./security";
-export { default as Database } from "./database";
+export { default as Database } from "./database/index";
 export { default as Log } from "./log";
 
 const Services = {
-    Security,
     Database,
     Log
 };

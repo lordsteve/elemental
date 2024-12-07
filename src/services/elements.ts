@@ -24,10 +24,11 @@ export default class El {
             return el;
         }
     }
-    private static getElements = <T extends HTMLElement = HTMLElement>(selector: string): NodeListOf<T> => {
+    private static getElements = <T extends HTMLElement = HTMLElement>(selector: string): NodeListOf<T> | null => {
         let els = document.querySelectorAll<T>(selector);
         if (!els || els.length == 0) {
-            throw new Error(`Nodes with selector "${selector}" not found!`);
+            console.error(`Nodes with selector "${selector}" not found!`);
+            return null;
         } else {
             els.id = (id: string) => {
                 const el = [...els].find(el => el.id === id);
@@ -97,10 +98,20 @@ export default class El {
     } set buttons(buttons: NodeListOf<HTMLButtonElement>) {
         this.buttons = buttons;
     }
+    public static get divs() {
+        return this.getElements<HTMLDivElement>('div');
+    } set divs(divs: NodeListOf<HTMLDivElement>) {
+        this.divs = divs;
+    }
     public static get forms() {
         return this.getElements<HTMLFormElement>('form');
     } set forms(forms: NodeListOf<HTMLFormElement>) {
         this.forms = forms;
+    }
+    public static get imgs() {
+        return this.getElements<HTMLImageElement>('img');
+    } set imgs(imgs: NodeListOf<HTMLImageElement>) {
+        this.imgs = imgs;
     }
     public static get formInputs() {
         return this.getElements<HTMLInputElement | HTMLTextAreaElement>('form input, form textarea');

@@ -1,35 +1,54 @@
 import 'module-alias/register';
+import 'reflect-metadata';
 
 import fs from 'fs';
 import http from 'http';
+import NodeCache from 'node-cache';
 import path from 'path';
 
+import Routes from './routes';
 
-import { Security } from 'services';
+if (!process.env.PORT) require('dotenv').config();
 
-//require('dotenv').config();
-
-const server = http.createServer((req: http.IncomingMessage, res: http.ServerResponse) => {
+const server = http.createServer(async (req: http.IncomingMessage, res: http.ServerResponse) => {
     const { method, headers } = req;
     let { url } = req;
+    const cache = new NodeCache({ stdTTL: 60 * 5 });
+    const sessionId = (headers['user-agent'] ?? '') + (headers['x-forwarded-for'] ?? '');
     
     if (method !== 'GET') {
-        let valid = Security.validateCSRFToken(headers['X-CSRF-TOKEN'] as string);
+        let valid = cache.get('csrf-token-' + sessionId) === headers['csrf-token'];
         if (!valid) {
             res.statusCode = 403;
             res.setHeader('Content-Type', 'text/plain');
             res.end('403 Forbidden');
+        } else {
+            cache.del('csrf-token-' + sessionId);
         }
     }
 
     switch (url) {
         case '/favicon.ico':
+            if (method !== 'GET') {
+                res.statusCode = 405;
+                res.setHeader('Content-Type', 'text/plain');
+                res.end('405 Method Not Allowed');
+                break;
+            }
             res.statusCode = 200;
-            res.setHeader('Content-Type', 'text/plain');
-            res.end('404 Not Found');
+            const favicon = fs.readFileSync(path.join(__dirname, '..', '..', 'www', 'storage', 'images', 'favicon.png'));
+            res.setHeader('Content-Type', 'image/png');
+            res.end(favicon);
             break;
         case '/csrf-token':
-            const token = Security.getCSRFToken();
+            if (method !== 'GET') {
+                res.statusCode = 405;
+                res.setHeader('Content-Type', 'text/plain');
+                res.end('405 Method Not Allowed');
+                break;
+            }
+            const token = Math.random().toString(36).substring(2);
+            cache.set('csrf-token-' + sessionId, token);
             res.statusCode = 200;
             res.setHeader('Content-Type', 'text/plain');
             res.end(token);
@@ -39,6 +58,17 @@ const server = http.createServer((req: http.IncomingMessage, res: http.ServerRes
                 res.statusCode = 403;
                 res.setHeader('Content-Type', 'text/plain');
                 res.end('403 Forbidden');
+            } else if (url?.startsWith('/storage/')) {
+                const storage = path.join(__dirname, '..', '..', 'www');
+                const file = fs.readFileSync(path.join(storage, url));
+                res.statusCode = 200;
+                res.setHeader('Content-Type', findContentType(findExtension(url)));
+                res.end(file);
+            } else if (url?.startsWith('/data/')) {
+                const { response, header, status } = await new Routes(req, res).response;
+                res.statusCode = status;
+                res.setHeader('Content-Type', header ?? 'application/json');
+                res.end(response);
             } else {
                 const www = path.join(__dirname, '..', '..', 'www');
 

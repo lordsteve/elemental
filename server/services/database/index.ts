@@ -1,10 +1,7 @@
-import Datatype from "./datatypes";
-import QueryBuilder from "./queryBuilder";
-import Service from "./service";
+import { AppDataSource } from "./data-source"
 
-export { default as Datatype } from "./datatypes";
-export { default as QueryBuilder } from "./queryBuilder";
-export { default as Service } from "./service";
+// AppDataSource.initialize().then(async () => {
+//     console.log("Database initialized");
+// }).catch(error => console.log(error))
 
-const Database = { Service, QueryBuilder, Datatype };
-export default Database;
+export default AppDataSource;
