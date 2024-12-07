@@ -9,8 +9,8 @@ views.nav();
 switch (location.pathname) {
     case '/':
         el.body.appendChild(views.homeTemplate(
-            'It\'s Elemental',
-            'A boilerplate framework for TypeScript web development.'
+            "It's Elemental",
+            "A boilerplate framework for TypeScript web development."
         ));
         views.home();
     break;
@@ -20,7 +20,7 @@ switch (location.pathname) {
     default:
         getHtml(location.pathname)
             .then((page) => {
-                if (page instanceof HTMLElement){
+                if (page instanceof HTMLElement) {
                     el.body.appendChild(page);
                 } else if (page instanceof NodeList) {
                     page.forEach((element) => {

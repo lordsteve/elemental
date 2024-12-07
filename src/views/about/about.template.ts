@@ -19,6 +19,7 @@ const about = html`
             </p>
         </section>
     </div>
-    </el-about>`;
+    </el-about>
+`;
 
 export default about;

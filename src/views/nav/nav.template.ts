@@ -7,6 +7,7 @@ const navTemplate = html`
             <li><a href="/about">About</a></li>
             <li><a href="/docs">Docs</a></li>
         </ul>
-    </nav>`;
+    </nav>
+`;
 
 export default navTemplate;

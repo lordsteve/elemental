@@ -16,7 +16,8 @@ const sidebarTemplate = (
             <ul>
                 ${itemsList.join('')}
             </ul>
-        </el-sidebar>`;
-    }
+        </el-sidebar>
+    `;
+}
 
 export default sidebarTemplate;
