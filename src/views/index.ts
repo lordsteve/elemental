@@ -1,18 +1,24 @@
+import about from '@views/about/about';
+import aboutTemplate from '@views/about/about.template';
 import home from '@views/home/home';
 import homeTemplate from '@views/home/home.template';
 import nav from '@views/nav/nav';
 import navTemplate from '@views/nav/nav.template';
-import about from '@views/about/about';
-import aboutTemplate from '@views/about/about.template';
+import docs from './docs/docs';
+import DocsRoutes from './docs/docs.routes';
+import docsTemplate from './docs/docs.template';
 import sidebar from './sidebar/sidebar';
 import sidebarTemplate from './sidebar/sidebar.template';
 
+export { default as about } from '@views/about/about';
+export { default as aboutTemplate } from '@views/about/about.template';
 export { default as home } from '@views/home/home';
 export { default as homeTemplate } from '@views/home/home.template';
 export { default as nav } from '@views/nav/nav';
 export { default as navTemplate } from '@views/nav/nav.template';
-export { default as about } from '@views/about/about';
-export { default as aboutTemplate } from '@views/about/about.template';
+export { default as docs } from './docs/docs';
+export { default as DocsRoutes } from './docs/docs.routes';
+export { default as docsTemplate } from './docs/docs.template';
 export { default as sidebar } from './sidebar/sidebar';
 export { default as sidebarTemplate } from './sidebar/sidebar.template';
 
@@ -24,6 +30,9 @@ const views = {
     about,
     aboutTemplate,
     sidebar,
-    sidebarTemplate
+    sidebarTemplate,
+    docs,
+    docsTemplate,
+    DocsRoutes
 };
 export default views;

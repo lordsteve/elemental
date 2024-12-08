@@ -1,5 +1,4 @@
 import { html, htmlstring } from '@services/elements';
-import sidebarTemplate from '@views/sidebar/sidebar.template';
 
 const homeTemplate = (
     heading: string,
@@ -9,11 +8,6 @@ const homeTemplate = (
 
     return html`
         <el-home>
-        ${sidebarTemplate({
-            '/':'Home',
-            '/about':'About',
-            '/docs':'Docs'
-        }).outerHTML}
             <div class="content-slate">
                 <section>
                     <h1>${heading}</h1>

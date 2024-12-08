@@ -133,6 +133,16 @@ export default class El {
     } set cookieBannerButton(cookieBannerButton: HTMLButtonElement) {
         this.cookieBannerButton = cookieBannerButton;
     }
+    public static get home() {
+        return this.getElement<HTMLElement>('el-home');
+    } set home(home: HTMLElement) {
+        this.home = home;
+    }
+    public static get docs() {
+        return this.getElement<HTMLElement>('el-docs');
+    } set docs(docs: HTMLElement) {
+        this.docs = docs;
+    }
 
     constructor(path: string, private submitted = false) {
         switch (path) {
