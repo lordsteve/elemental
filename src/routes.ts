@@ -39,6 +39,11 @@ export default class Routes {
         }
     }
 
+    ['another-test']() {
+        el.body.appendChild(views.homeTemplate('Another Test', 'Another test page.'));
+        views.home();
+    }
+
     view() {
         const view = this[this.path[0]].bind(this) as Function;
         if (typeof view !== 'function') {
