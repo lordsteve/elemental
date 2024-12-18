@@ -13,4 +13,11 @@ export default class DocsRoutes extends Routes {
         );
         views.docs();
     }
+
+    ['elements']() {
+        el.body.appendChild(
+            views.docsTemplate.elementsTemplate
+        );
+        views.docs();
+    }
 }

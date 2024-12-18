@@ -1,5 +1,6 @@
 import el, { html } from '@services/elements';
 import gettingStartedTemplate from './gettingStarted/gettingStarted.template';
+import elementsTemplate from './elements/elements.template';
 
 const docsTemplate = () => {
     return html`
@@ -20,4 +21,5 @@ const docsTemplate = () => {
     `;
 }
 docsTemplate.gettingStarted = gettingStartedTemplate;
+docsTemplate.elementsTemplate = elementsTemplate;
 export default docsTemplate;

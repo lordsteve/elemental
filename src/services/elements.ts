@@ -222,14 +222,7 @@ export default class El {
                         values[input.name] = input.value;
                 });
 
-                // let content = window.tinymce.get('content')?.getContent() ?? '';
-                // let message = window.tinymce.get('message')?.getContent() ?? '';
-                // let description = window.tinymce.get('description')?.getContent() ?? '';
-
                 StorageBox.set('formValues', values);
-                // StorageBox.set('content', content);
-                // StorageBox.set('message', message);
-                // StorageBox.set('description', description);
             }
         })(window.onbeforeunload?.bind(window));
         window.onload = ((oldLoad: typeof window.onload | undefined) => {
@@ -239,9 +232,6 @@ export default class El {
                 if (this.formInputs.length == 0) return;
 
                 let values = StorageBox.get<FormValues>('formValues');
-                // let content = StorageBox.get<string>('content');
-                // let message = StorageBox.get<string>('message');
-                // let description = StorageBox.get<string>('description');
 
                 this.formInputs.forEach(input => {
                     if (input && input.name
@@ -251,17 +241,7 @@ export default class El {
                     ) input.value = values[input.name];
                 });
 
-                // if (content && typeof content === 'string' && content !== '')
-                //     window.tinymce.get('content')?.setContent(content);
-                // if (message && typeof message === 'string' && message !== '')
-                //     window.tinymce.get('message')?.setContent(message);
-                // if (description && typeof description === 'string' && description !== '')
-                //     window.tinymce.get('description')?.setContent(description);
-
                 StorageBox.remove('formValues');
-                // StorageBox.remove('content');
-                // StorageBox.remove('message');
-                // StorageBox.remove('description');
             }
         })(window.onload?.bind(window));
 
@@ -313,4 +293,10 @@ export function htmlstring(html: TemplateStringsArray, ...values: any[]): string
    let string: string = '';
    html.forEach((str, i) => string += str + (values[i] ?? ''));
    return string;
+}
+
+export function escapeHtml(html: TemplateStringsArray, ...values: any[]): string {
+   let string: string = '';
+   html.forEach((str, i) => string += str + (values[i] ?? ''));
+   return string.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
