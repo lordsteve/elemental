@@ -33,6 +33,8 @@ export default class El {
             els.id = (id: string) => {
                 const el = [...els].find(el => el.id === id);
                 if (!el) throw new Error(`Element with id "${id}" not found.`);
+                if (el.getAttribute('bg'))
+                    el.style.backgroundImage = `url(${el.getAttribute('bg')})`;
                 return el;
             }
             return els;

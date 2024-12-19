@@ -61,6 +61,12 @@ const gettingStartedTemplate = html`
                 <p>
                     If you are using VS Code, I recommend using <a href="https://marketplace.visualstudio.com/items?itemName=lehwark.htmx-literals" target="_blank">htmx-literals</a> for syntax highlighting. You can install it through the extensions tab. Elemental relies heavily on template literals for creating HTML elements, and this extension will make it easier to read and write those literals.
                 </p>
+                <p>
+                    I know that different people learn things differently, so there are comments all over the code that will help explain what's going on if you just want to dig in, but I'll also do my best to explain things in the documentation.
+                </p>
+                <p>
+                    The first thing you should know about is the <a href="/docs/elements">Elements service</a>.
+                </p>
             </section>
         </div>
     </el-docs>
