@@ -15,14 +15,8 @@ declare global {
 export default class El {
     private static getElement = <T extends HTMLElement = HTMLElement>(selector: string): T => {
         let el = document.querySelector<T>(selector);
-        if (!el) {
-            throw new Error(`Node with selector "${selector}" not found!`);
-        } else {
-            // this will create the bg attribute and use it to set the element's background image
-            if (el.getAttribute('bg'))
-                el.style.backgroundImage = `url(${el.getAttribute('bg')})`;
-            return el;
-        }
+        if (!el) throw new Error(`Node with selector "${selector}" not found!`);
+        return el;
     }
     private static getElements = <T extends HTMLElement = HTMLElement>(selector: string): NodeListOf<T> | null => {
         let els = document.querySelectorAll<T>(selector);
@@ -33,8 +27,6 @@ export default class El {
             els.id = (id: string) => {
                 const el = [...els].find(el => el.id === id);
                 if (!el) throw new Error(`Element with id "${id}" not found.`);
-                if (el.getAttribute('bg'))
-                    el.style.backgroundImage = `url(${el.getAttribute('bg')})`;
                 return el;
             }
             return els;
@@ -147,6 +139,10 @@ export default class El {
     }
 
     constructor(path: string, private submitted = false) {
+        document.querySelectorAll('[bg]').forEach(el => {
+            // this will create the bg attribute and use it to set the element's background image
+            (el as HTMLElement).style.backgroundImage = `url(${el.getAttribute('bg')})`;
+        }); 
         switch (path) {
             case PathNames.HOME:
                 // Make El behave a certain way according to which page its on

@@ -9,7 +9,10 @@ const elementsTemplate = html`
                     The Elements service is the heart and soul of the Elemental framework. It makes it super easy to get whatever DOM element you need to manipulate by using the native JavaScript <code>document.querySelector()</code> method wrapped in a getter function.
                 </p>
                 <p>
-                    For example, if you write a <code>${escapeHtml`<div>`}</code> element with an id of <code>"my-div"</code> in your HTML, you can access that element in your TypeScript file by calling <code>el.divs.id('my-div')</code>. This will return the <code>${escapeHtml`<div>`}</code> element with the id of <code>"my-div"</code> that you can then manipulate with the Element API.
+                    For example, if you write a <code>${escapeHtml`<div>`}</code> element with an id of <code>"my-div"</code> in your HTML, you can access that element in your TypeScript file by calling <code>el.divs.id('my-div')</code>. This will return the <code>${escapeHtml`<div>`}</code> element with the id of <code>"my-div"</code> that you can then manipulate as you see fit.
+                </p>
+                <p>
+                    It's important to import the Elements service at the top of your TypeScript file with <code>import el from '@services/elements';</code>. The lowercase <code>el</code> is a convention that is used throughout the Elemental framework, and it's a good idea to stick with it. The Elements service is a singleton, so you can access it from anywhere in your TypeScript file.
                 </p>
                 <h4>Adding to the Existing Element Objects</h4>
                 <p>
@@ -58,7 +61,46 @@ const elementsTemplate = html`
                     </ul>
                 </p>
                 <p>
-                    The great thing about the Elements service is that if you think there's an element mising, you can just go ahead and add it. Just add in a new getter and setter in the same way that the other elements are set up, and you're good to go.
+                    The great thing about the Elements service is that if you think there's an element mising, you can just go ahead and add it. Just add in a new getter and setter in the same way that the other elements are set up, and you're good to go. For example, when you create a new page, you should create an element for that page. This element will follow the naming convention of <code>${escapeHtml`<el-docs>`}</code> for a page named "Docs", and once you add the getter and setter, you will be able to access that element in your TypeScript file by calling <code>el.docs</code>. This will also make it easy for you to target that page in your CSS file by adding <code>el-docs</code> in front of the target class or id, for example: <code>el-docs .content-slate</code>.
+                </p>
+                <p>
+                    But now we're getting into how to organize Views, so let's get into that next. But before we do that, there is one essential part of the Elements service that is critical to making new views, and that is the <code>html</code> function. Let's take a look at that next.
+                </p>
+
+                <h4>Template Literals</h4>
+                <p>
+                    You'll notice there are no html files in Elemental except for the base <code>index.html</code> file. This is because Elemental uses tagged template literals to create the HTML for the page. This is a great way to keep the HTML and TypeScript together to make it easy to see what the HTML looks like when you're working in TypeScript.
+                </p>
+                <p>
+                    Tagged template literals are a relatively new feature in JavaScript that allows you to take a literal string and parse it with a function. In this case, the <code>html</code> function takes the string and returns an element. it works like this:
+                </p>
+                <code>
+                    const myElement = html${escapeHtml`\``}<br>
+                    &nbsp;&nbsp;${escapeHtml`<div>`}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;${escapeHtml`<p>My paragraph $\{including a variable\}</p>`}<br>
+                    &nbsp;&nbsp;${escapeHtml`</div>`}<br>
+                    ${escapeHtml`\``};
+                </code>
+                <p>
+                    As you can see, a tagged template literal is used by immediately following the function name with a tick mark. In the Elements service, that function looks like this:
+                </p>
+                <code>
+                    export function html(html: TemplateStringsArray, ...values: any[]): HTMLElement {<br>
+                    &nbsp;&nbsp;let string: string = '';<br>
+                    &nbsp;&nbsp;html.forEach((str, i) => string += str + (values[i] ?? ''));<br>
+                    &nbsp;&nbsp;const template = document.createElement('template');<br>
+                    &nbsp;&nbsp;template.innerHTML = string.trim();<br>
+                    &nbsp;&nbsp;return template.content.firstChild as HTMLElement;<br>
+                    }
+                </code>
+                <p>
+                    The <code>html</code> parameter is a <code>TemplateStringsArray</code>, which is an array of strings that are the literal parts of the template literal divided by the values that are passed in by the <code>${escapeHtml`$\{\}`}</code>. The <code>values</code> parameter is a rest parameter that takes all the values that are passed into the template literal. The function then loops through the <code>html</code> array and adds the literal parts of the template literal to the <code>string</code> variable. If there are values passed in, it adds those as well. It then creates a <code>template</code> element, sets the <code>innerHTML</code> to the <code>string</code> variable, and returns the first child of the <code>content</code> property of the <code>template</code> element as an <code>HTMLElement</code>.
+                </p>
+                <p>
+                    Template literal tags are not a part of the Elements object, so you'll have to import the <code>html</code> function at the top of your TypeScript file with <code>import { html } from '@services/elements';</code>. You can also import the <code>escapeHtml</code> function in the same way. This tag allows you to type out HTML that will be interpreted as a string and not as actual HTML.
+                </p>
+                <p>
+                    You can learn more about tagged template literals <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates" target="_blank">here</a>. But now that you have a basic idea of how they work here in Elemental, we can move on to <a href="/docs/views">creating Views</a>!
                 </p>
             </section>
         </div>
