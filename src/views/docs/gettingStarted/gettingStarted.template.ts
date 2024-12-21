@@ -1,6 +1,6 @@
 import { html } from "@services/elements";
 
-const gettingStartedTemplate = html`
+const gettingStartedTemplate = () => html`
     <el-docs>
         <div class="content-slate">
             <section>

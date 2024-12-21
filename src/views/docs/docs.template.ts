@@ -1,9 +1,9 @@
 import el, { html } from '@services/elements';
 import gettingStartedTemplate from './gettingStarted/gettingStarted.template';
 import elementsTemplate from './elements/elements.template';
+import viewsTemplate from './views/views.template';
 
-const docsTemplate = () => {
-    return html`
+const docsTemplate = () => html`
         <el-docs>
             <div class="content-slate">
                 <section>
@@ -19,7 +19,7 @@ const docsTemplate = () => {
             </div>
         </el-docs>
     `;
-}
 docsTemplate.gettingStarted = gettingStartedTemplate;
 docsTemplate.elementsTemplate = elementsTemplate;
+docsTemplate.viewsTemplate = viewsTemplate;
 export default docsTemplate;

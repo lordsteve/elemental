@@ -25,7 +25,7 @@ export default class Routes {
     }
 
     ['about']() {
-        el.body.appendChild(views.aboutTemplate);
+        el.body.appendChild(views.aboutTemplate());
         views.about();
     }
 

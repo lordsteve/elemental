@@ -9,15 +9,36 @@ export default class DocsRoutes extends Routes {
 
     ['getting-started']() {
         el.body.appendChild(
-            views.docsTemplate.gettingStarted
+            views.docsTemplate.gettingStarted()
         );
         views.docs();
     }
 
     ['elements']() {
         el.body.appendChild(
-            views.docsTemplate.elementsTemplate
+            views.docsTemplate.elementsTemplate()
         );
+        views.docs();
+    }
+
+    ['services']() {
+        // el.body.appendChild(
+        //     views.docsTemplate.servicesTemplate
+        // );
+        views.docs();
+    }
+
+    ['views']() {
+        el.body.appendChild(
+            views.docsTemplate.viewsTemplate()
+        );
+        views.docs();
+    }
+
+    ['faq']() {
+        // el.body.appendChild(
+        //     views.docsTemplate.faqTemplate
+        // );
         views.docs();
     }
 }

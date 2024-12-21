@@ -1,6 +1,6 @@
 import { html } from "@services/elements";
 
-const navTemplate = html`
+const navTemplate = () => html`
     <nav>
         <ul>
             <li><a href="/">Home</a></li>

@@ -1,7 +1,7 @@
-import { html, htmlstring } from "@services/elements";
+import { html } from "@services/elements";
 import sidebarTemplate from "@views/sidebar/sidebar.template";
 
-const about = html`
+const about = () => html`
     <el-about>
     ${sidebarTemplate({
         '/':'Home',

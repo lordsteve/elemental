@@ -296,5 +296,5 @@ export function htmlstring(html: TemplateStringsArray, ...values: any[]): string
 export function escapeHtml(html: TemplateStringsArray, ...values: any[]): string {
    let string: string = '';
    html.forEach((str, i) => string += str + (values[i] ?? ''));
-   return string.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+   return string.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/`/g, '&#96;').replace(/ /g, '&nbsp;');
 }

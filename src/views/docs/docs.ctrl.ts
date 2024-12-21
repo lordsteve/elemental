@@ -10,8 +10,8 @@ export default function docs() {
         "/docs": "Docs",
         "/docs/getting-started": "Getting Started",
         "/docs/elements": "Elements",
-        "/docs/services": "Services",
         "/docs/views": "Views",
+        "/docs/services": "Services",
         "/docs/faq": "FAQ"
     }), docs.firstChild);
 }

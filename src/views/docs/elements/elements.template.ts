@@ -1,6 +1,6 @@
 import { escapeHtml, html } from "@services/elements";
 
-const elementsTemplate = html`
+const elementsTemplate = () => html`
     <el-docs>
         <div class="content-slate">
             <section>
@@ -76,9 +76,9 @@ const elementsTemplate = html`
                 </p>
                 <code>
                     const myElement = html${escapeHtml`\``}<br>
-                    &nbsp;&nbsp;${escapeHtml`<div>`}<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;${escapeHtml`<p>My paragraph $\{including a variable\}</p>`}<br>
-                    &nbsp;&nbsp;${escapeHtml`</div>`}<br>
+                    ${escapeHtml`  <div>`}<br>
+                    ${escapeHtml`    <p>My paragraph $\{including a variable\}</p>`}<br>
+                    ${escapeHtml`  </div>`}<br>
                     ${escapeHtml`\``};
                 </code>
                 <p>
