@@ -66,7 +66,7 @@ const viewsTemplate = () => html`
                     export default helloWorldTemplate;
                 </code>
                 <p>
-                    If you want to manipulate the data that you pass into the template, you will have to provide a return statement in the template function. For example, if you wanted to capitalize the name before it was rendered, you could do it like this:
+                    If you want to manipulate the data that you pass into the template, you will have to provide a return statement in the template function. For example, if you wanted to capitalize the name before it's rendered, you could do it like this:
                 </p>
                 <code>
                     import { html } from '@services/elements';<br>
@@ -87,7 +87,7 @@ const viewsTemplate = () => html`
                     Be careful the amount of functionality you try to provide in the template, though. Most of the functionality should be provided in the controller. The template should remain as simple as possible.
                 </p>
                 <p>
-                    The last thing you should know about views is how to handle sub-views. When you navigate to a page, sometimes you'll want to organize that section of the app into deeper views. For example, this page is in the <code>docs</code> section, with a sub-view of <code>views</code> because you can see that the URL is <code>/docs/views</code>. This should be done by creating another view folder within the parent view folder, importing the child view and then tacking it onto the parent view template. For example, if you had a <code>home</code> view and you wanted to add a <code>helloWorld</code> view to it, you would do it like this:
+                    The last thing you should know about templates is how to handle sub-views. When you navigate to a page, sometimes you'll want to organize that section of the app into deeper views. For example, this page is in the <code>docs</code> section, with a sub-view of <code>views</code> because you can see that the URL is <code>/docs/views</code>. This should be done by creating another view folder within the parent view folder, importing the child view and then tacking it onto the parent view template. For example, if you had a <code>home</code> view and you wanted to add a <code>helloWorld</code> view to it, you would do it like this:
                 </p>
                 <code>
                     import { html } from '@services/elements';<br>
@@ -114,7 +114,7 @@ const viewsTemplate = () => html`
                     import el from '@services/elements';<br>
                     <br>
                     export function helloWorld() {<br>
-                    &nbsp;&nbsp;el.title = 'Hello World!';<br>
+                    &nbsp;&nbsp;el.title.innerText = 'Hello World!';<br>
                     &nbsp;&nbsp;console.log(helloWorld);<br>
                     }
                 </code>
@@ -144,7 +144,7 @@ const viewsTemplate = () => html`
                     import el from '@services/elements';<br>
                     <br>
                     export function helloWorld() {<br>
-                    &nbsp;&nbsp;el.title = 'Hello World!';<br>
+                    &nbsp;&nbsp;el.title.innerText = 'Hello World!';<br>
                     &nbsp;&nbsp;const button = el.buttons.id('hello-button');<br>
                     &nbsp;&nbsp;if (button) button.onclick = () => {<br>
                     &nbsp;&nbsp;&nbsp;&nbsp;console.log('Hello!');<br>
@@ -152,7 +152,13 @@ const viewsTemplate = () => html`
                     }
                 </code>
                 <p>
-                    I know you're thinking, "But, Steve! I know I put the button on the template, why do I have to check if it exists?" Well, pretty much all of the elements in the Elements service are nullable. This is because the Elements service is a wrapper for the native DOM elements, and sometimes the elements might not exist when you try to access them. So, you should always check if the element exists before you try to manipulate it or else TypeScript will yell at you that it's possibly null. This is a useful practice if you want to use the same controller for multpile views and some of the elements are different. If the element doesn't exist on the page, the Elements service will let you know in the console the moment you try to access it. Also, if you're unfamiliar with that if statement syntax, it's a shorthand way of writing it that works if you only have one line of code to execute.
+                    I know you're thinking, "But, Steve! I know I put the button on the template, why do I have to check if it exists?" Well, pretty much all of the elements in the Elements service are nullable. This is because the Elements service is a wrapper for the native DOM elements, and sometimes the elements might not exist when you try to access them. So, you should always check if the element exists before you try to manipulate it or else TypeScript will yell at you that it's possibly null. This is a useful practice if you want to use the same controller for multpile views and some of the elements are different. If the element doesn't exist on the page, the Elements service will let you know in the console the moment you try to access it.
+                </p>
+                <p>
+                    Also, if you're unfamiliar with that if statement syntax, it's a shorthand way of writing it that works if you only have one line of code to execute.
+                </p>
+                <p>
+                    Also, also, it's good practice to use <code>.onclick</code> rather than <code>.addEventListener('click', () => {})</code>. Event listeners always have to be removed when you're done with them or else they could cause memory leaks. And, although most modern browsers will clean up after you, it's still better to be safe than sorry. The only exception to this is if you wanna add multiple event listeners for the same event to the same element at the same time, or you wanna get fancy with the event propogation. Then you should use <code>.addEventListener</code> and remove them all when you're done.
                 </p>
                 <h4>Styles</h4>
                 <p>
@@ -173,6 +179,30 @@ const viewsTemplate = () => html`
                 </code>
                 <p>
                     If you want to write global styles that apply to all views, you can write them in the <code>main.css</code> file. This is where you would put things like the body styles or the styles for global text or default buttons, etc.
+                </p>
+                <h4>View Index</h4>
+                <p>
+                    The last thing you need to know about views is very simple, but very important. They are all imported and exported into the base <code>views/index.ts</code> file. This is so that the Routes file can access them all at once. This file should look something like this:
+                </p>
+                <code>
+                    import helloWorldTemplate from './helloWorld/helloWorld.template';<br>
+                    import { helloWorld } from './helloWorld/helloWorld.ctrl';<br>
+                    <br>
+                    export { default as helloWorldTemplate } from './helloWorld/helloWorld.template';<br>
+                    export { default as helloWorld } from './helloWorld/helloWorld.ctrl';<br>
+                    <br>
+                    const views = {<br>
+                    &nbsp;&nbsp;helloWorldTemplate,<br>
+                    &nbsp;&nbsp;helloWorld<br>
+                    };
+                    <br>
+                    export default views;
+                </code>
+                <p>
+                    Sub-views make it into this file when they are attached to their parent view, so it's not necessary to import them here.
+                </p>
+                <p>
+                    That's basically how views work in Elemental. Next up, you need to know how the <a href="/docs/routes">Route</a> files work. And, yes, that's plural! You'll see why...
                 </p>
             </section>
         </div>

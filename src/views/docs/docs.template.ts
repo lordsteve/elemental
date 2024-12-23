@@ -2,6 +2,7 @@ import el, { html } from '@services/elements';
 import gettingStartedTemplate from './gettingStarted/gettingStarted.template';
 import elementsTemplate from './elements/elements.template';
 import viewsTemplate from './views/views.template';
+import routesTemplate from './routes/routes.template';
 
 const docsTemplate = () => html`
         <el-docs>
@@ -22,4 +23,5 @@ const docsTemplate = () => html`
 docsTemplate.gettingStarted = gettingStartedTemplate;
 docsTemplate.elementsTemplate = elementsTemplate;
 docsTemplate.viewsTemplate = viewsTemplate;
+docsTemplate.routesTemplate = routesTemplate;
 export default docsTemplate;

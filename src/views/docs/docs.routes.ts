@@ -21,10 +21,10 @@ export default class DocsRoutes extends Routes {
         views.docs();
     }
 
-    ['services']() {
-        // el.body.appendChild(
-        //     views.docsTemplate.servicesTemplate
-        // );
+    ['routes']() {
+        el.body.appendChild(
+            views.docsTemplate.routesTemplate()
+        );
         views.docs();
     }
 

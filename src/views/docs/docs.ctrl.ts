@@ -11,7 +11,7 @@ export default function docs() {
         "/docs/getting-started": "Getting Started",
         "/docs/elements": "Elements",
         "/docs/views": "Views",
-        "/docs/services": "Services",
+        "/docs/routes": "Routes",
         "/docs/faq": "FAQ"
     }), docs.firstChild);
 }

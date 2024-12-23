@@ -40,7 +40,7 @@ export default class Routes {
     }
 
     view() {
-        const view = this[this.path[0]].bind(this) as Function;
+        const view = this[this.path[0]].bind(this);
         if (typeof view !== 'function') {
             getHtml(location.pathname)
             .then((page) => {
@@ -58,7 +58,6 @@ export default class Routes {
                 }
             });
         } else {
-            view.bind(this);
             view();
         }
     }
