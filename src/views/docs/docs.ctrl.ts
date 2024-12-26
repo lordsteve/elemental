@@ -12,6 +12,7 @@ export default function docs() {
         "/docs/elements": "Elements",
         "/docs/views": "Views",
         "/docs/routes": "Routes",
+        "/docs/request-service": "Request Service",
         "/docs/faq": "FAQ"
     }), docs.firstChild);
 }

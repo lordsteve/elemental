@@ -1,7 +1,5 @@
 import el from '@services/elements';
 
-type RequestData = { [key: string]: string | boolean | number };
-
 export function initLoader() {
     window.fetch = ((oldFetch: typeof window.fetch, input: RequestInfo | URL = '', init?: RequestInit | undefined) => {
         return async (url: RequestInfo | URL = input, options: RequestInit | undefined = init) => {
@@ -109,3 +107,4 @@ export async function del<T = Response>(path: string, data: RequestData | null =
 }
 
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
+type RequestData = { [key: string]: string | boolean | number };

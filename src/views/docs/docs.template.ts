@@ -3,6 +3,7 @@ import gettingStartedTemplate from './gettingStarted/gettingStarted.template';
 import elementsTemplate from './elements/elements.template';
 import viewsTemplate from './views/views.template';
 import routesTemplate from './routes/routes.template';
+import requestServiceTemplate from './requestService/requestService.template';
 
 const docsTemplate = () => html`
         <el-docs>
@@ -24,4 +25,5 @@ docsTemplate.gettingStarted = gettingStartedTemplate;
 docsTemplate.elementsTemplate = elementsTemplate;
 docsTemplate.viewsTemplate = viewsTemplate;
 docsTemplate.routesTemplate = routesTemplate;
+docsTemplate.requestServiceTemplate = requestServiceTemplate;
 export default docsTemplate;
