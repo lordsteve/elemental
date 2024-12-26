@@ -7,13 +7,13 @@ export default class Routes {
     constructor(
         public path: string[]
     ) {
-        new URLSearchParams(location.search).entries().forEach((entry) => {
-            this.query[entry[0]] = isNaN(Number(entry[1]))
-                ? entry[1].toLowerCase() == 'true' || entry[1].toLowerCase() == 'false'
-                    ? Boolean(entry[1].toLowerCase())
-                    : entry[1]
-                : Number(entry[1]);
-        });
+        for (let [key, value] of new URLSearchParams(location.search).entries()) {
+            this.query[key] = isNaN(Number(value))
+                ? value.toLowerCase() == 'true' || value.toLowerCase() == 'false'
+                    ? Boolean(value.toLowerCase())
+                    : value
+                : Number(value);
+        }
     }
 
     ['']() {
