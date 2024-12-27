@@ -1,4 +1,4 @@
-import { html, escapeHtml } from "@services/elements";
+import { escapeHtml, html } from "@services/elements";
 
 const requestService = () => html`
     <el-docs>
@@ -92,11 +92,17 @@ escapeHtml`export default async function request<T = Response>(
                     This takes a method, a path, some data, and an optional flag to evaluate the result. Depending on the method, the data should be built as a RequestData object or a plain object. If the method is GET, the data will be appended to the path as query parameters. If the method is POST, PUT, or DELETE, the data will be sent as JSON in the request. The <code>evalResult</code> flag is used to determine if the response should be evaluated as JSON or returned as is.
                 </p>
                 <p>
-                    This is just the basic request, though. There are other functions in the request service that can be used to make more specific requests. For example, the <code>get</code>, <code>post</code>, <code>put</code>, and <code>delete</code> functions are all wrappers around the <code>request</code> function that make it easier to make specific types of requests. So, most of the time when you see a request being made in a controller, it'll look something like this:
+                    This is just the basic request, though. There are other functions in the request service that can be used to make more specific requests. The <code>get</code>, <code>post</code>, <code>put</code>, and <code>delete</code> functions are all wrappers around the <code>request</code> function that just automatically choose the corresponding method and return an evaulated response. So, most of the time when you see a request being made in a controller, it'll look something like this: <code>const data = await get('/data/path');</code> or this: <code>const response = await post('/data/path', { key: 'value' });</code>
                 </p>
-                <code>
-                    const data = await get('/data/path');
-                </code>
+                <p>
+                    Another unique thing about making requests has to do with how the server handles them. There are three different URI directories that the server will respond to: <code>/views/</code>, <code>/storage/</code>, and <code>/data/</code>. The <code>/views/</code> directory is used to serve HTML, CSS, and JavaScript files (useful for serving modals on top of a page that's already being served). The <code>/storage/</code> directory is used to serve files from the <code>www/storage</code> directory (things like pictures and downloadables). The <code>/data/</code> directory is used to serve data from a database.
+                </p>
+                <p>
+                    So, if you want to serve a file from the <code>www/storage</code> directory, you would make a request like this: <code>const file = await get('/storage/path/to/file');</code>. If you want to serve a view from the <code>www/views</code> directory, you would make a request like this: <code>const view = await getHtml('/views/path/to/view');</code>. And if you want to serve data from the server, you would make a request like this: <code>const data = await get('/data/path/to/data');</code>.
+                </p>
+                <p>
+                    You'll notice the <code>getHtml</code> function in there. This is a special function that's used to serve HTML views. It's a little different from the other request functions because it can return either a single <code>HTMLElement</code> or a <code>NodeListOf&lt;HTMLElements&gt;</code>. This is useful for serving modals or other views that need to be added to the page.
+                </p>
             </section>
         </div>
     </el-docs>
