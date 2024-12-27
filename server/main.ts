@@ -35,10 +35,16 @@ const server = http.createServer(async (req: http.IncomingMessage, res: http.Ser
                 res.end('405 Method Not Allowed');
                 break;
             }
-            res.statusCode = 200;
-            const favicon = fs.readFileSync(path.join(__dirname, '..', '..', 'www', 'storage', 'images', 'favicon.png'));
-            res.setHeader('Content-Type', 'image/png');
-            res.end(favicon);
+            try {
+                const favicon = fs.readFileSync(path.join(__dirname, '..', '..', 'www', 'storage', 'images', 'favicon.png'));
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'image/png');
+                res.end(favicon);
+            } catch {
+                res.statusCode = 404;
+                res.setHeader('Content-Type', 'text/plain');
+                res.end('404 Not Found');
+            }
             break;
         case '/csrf-token':
             if (method !== 'GET') {
@@ -59,11 +65,17 @@ const server = http.createServer(async (req: http.IncomingMessage, res: http.Ser
                 res.setHeader('Content-Type', 'text/plain');
                 res.end('403 Forbidden');
             } else if (url?.startsWith('/storage/')) {
-                const storage = path.join(__dirname, '..', '..', 'www');
-                const file = fs.readFileSync(path.join(storage, url));
-                res.statusCode = 200;
-                res.setHeader('Content-Type', findContentType(findExtension(url)));
-                res.end(file);
+                try {
+                    const storage = path.join(__dirname, '..', '..', 'www');
+                    const file = fs.readFileSync(path.join(storage, url));
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', findContentType(findExtension(url)));
+                    res.end(file);
+                } catch {
+                    res.statusCode = 404;
+                    res.setHeader('Content-Type', 'text/plain');
+                    res.end('404 Not Found');
+                }
             } else if (url?.startsWith('/data/')) {
                 const { response, header, status } = await new Routes(req, res).response;
                 res.statusCode = status;

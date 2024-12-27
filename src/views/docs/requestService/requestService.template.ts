@@ -101,7 +101,7 @@ escapeHtml`export default async function request<T = Response>(
                     So, if you want to serve a file from the <code>www/storage</code> directory, you would make a request like this: <code>const file = await get('/storage/path/to/file');</code>. If you want to serve a view from the <code>www/views</code> directory, you would make a request like this: <code>const view = await getHtml('/views/path/to/view');</code>. And if you want to serve data from the server, you would make a request like this: <code>const data = await get('/data/path/to/data');</code>.
                 </p>
                 <p>
-                    You'll notice the <code>getHtml</code> function in there. This is a special function that's used to serve HTML views. It's a little different from the other request functions because it can return either a single <code>HTMLElement</code> or a <code>NodeListOf&lt;HTMLElements&gt;</code>. This is useful for serving modals or other views that need to be added to the page.
+                    You'll notice the <code>getHtml</code> function in there. This is a special function that's used to serve HTML views. It's a little different from the other request functions because it can return either a single <code>HTMLElement</code> or a <code>NodeListOf&lt;HTMLElement&gt;</code>. This is useful for serving modals or other views that need to be added to the page.
                 </p>
             </section>
         </div>
