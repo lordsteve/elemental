@@ -1,9 +1,10 @@
-import el, { html } from '@services/elements';
-import gettingStartedTemplate from './gettingStarted/gettingStarted.template';
+import { html } from '@services/elements';
 import elementsTemplate from './elements/elements.template';
-import viewsTemplate from './views/views.template';
-import routesTemplate from './routes/routes.template';
+import gettingStartedTemplate from './gettingStarted/gettingStarted.template';
 import requestServiceTemplate from './requestService/requestService.template';
+import routesTemplate from './routes/routes.template';
+import theServer from './theServer/theServer.template';
+import viewsTemplate from './views/views.template';
 
 const docsTemplate = () => html`
         <el-docs>
@@ -26,4 +27,5 @@ docsTemplate.elementsTemplate = elementsTemplate;
 docsTemplate.viewsTemplate = viewsTemplate;
 docsTemplate.routesTemplate = routesTemplate;
 docsTemplate.requestServiceTemplate = requestServiceTemplate;
+docsTemplate.theServer = theServer;
 export default docsTemplate;
