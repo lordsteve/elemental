@@ -4,7 +4,7 @@ This is a boilerplate framework for working with node and Typescript. The intent
 
 On the front end, the idea is to use Typescript to directly manipulate the DOM, and to create an easy way to understand how to do that. That's where the name comes from: manipulating DOM Elements. There should be no syntax here that is unique to Elemental. Rather, Elemental should provide an easy way of understanding how the existing TypeScript syntax could be utilized and organized to create an app.
 
-This is FAR from a finished project, so feel free to hop in and help develop this!
+This will never be a finished project, so feel free to hop in and help develop this!
 
 Just clone this repo and then
 `npm install`
