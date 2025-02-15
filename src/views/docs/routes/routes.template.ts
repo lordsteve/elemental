@@ -37,56 +37,90 @@ const routesTemplate = () => html`
                     The Routes class is set up like this:
                 </p>
                 <code>
-                    import el from "@services/elements";<br>
-                    import views from "@views";<br>
-                    import { getHtml } from "@services/request";<br>
-                    <br>
-                    export default class Routes {<br>
-                    &nbsp;&nbsp;query: {[key: string]: any} = {};<br>
-                    &nbsp;&nbsp;constructor(<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;public path: string[]<br>
-                    &nbsp;&nbsp;) {<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;new URLSearchParams(location.search).entries().forEach((entry) => {<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;this.query[entry[0]] = isNaN(Number(entry[1])<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;? entry[1].toLowerCase() == 'true' || entry[1].toLowerCase() == 'false'<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;? Boolean(entry[1].toLowerCase())<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: entry[1]<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: Number(entry[1]);<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;});<br>
-                    &nbsp;&nbsp;}<br>
-                    <br>
-                    &nbsp;&nbsp;['']() {<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;el.body.appendChild(views.homeTemplate(<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"It's Elemental",<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"A boilerplate framework for TypeScript web development."<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;));<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;views.home();<br>
-                    &nbsp;&nbsp;}<br>
-                    <br>
-                    view() {<br>
-                    &nbsp;&nbsp;const view = this[this.path[0]].bind(this);<br>
-                    &nbsp;&nbsp;if (typeof view !== 'function') {<br>
-                    &nbsp;&nbsp;&nbsp;getHtml(location.pathname)<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;.then((page) => {<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (page instanceof HTMLElement) {<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;el.body.appendChild(page);<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (page instanceof NodeList) {<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;page.forEach((element) => {<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;el.body.appendChild(element);<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (el.nav.nextElementSibling === null) {<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;el.body.appendChild(views.homeTemplate('404', 'Page Not Found'));<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;views.home();<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;});<br>
-                    &nbsp;&nbsp;} else {<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;view();<br>
-                    &nbsp;&nbsp;}<br>
-                    }<br>
+${escapeHtml`import el from "@services/elements";
+import views from "@views";
+import RoutesBase from "./routes.base";
+
+export default class Routes extends RoutesBase {
+
+    ['about']() {
+        el.body.appendChild(views.aboutTemplate());
+        views.about();
+    }
+
+    ['docs']() {
+        if (this.path[1]) {
+            this.path.shift();
+            new views.DocsRoutes(this.path).view();
+        } else {
+            el.body.appendChild(views.docsTemplate());
+            views.docs();
+        }
+    }
+
+}`}
                 </code>
                 <p>
-                    So, it looks like there's a lot going on here, but it's really pretty simple. As you know, the path is being passed in as an array. So, what the <code>view()</code> function does is call whatever function corresponds to the first string in the array. If there's no function that corresponds to that string, it defaults to the server first, and if that returns nothing, it serves a 404 page.
+                    But the really important part is in the <code>RoutesBase</code> class, which is set up like this:
+                </p>
+                <code>
+${escapeHtml`import el from "@services/elements";
+import { getHtml } from "@services/request";
+import views from "@views";
+
+export default class RoutesBase {
+    query: {[key: string]: any} = {};
+    constructor(
+        public path: string[]
+    ) {
+        for (const [key, value] of new URLSearchParams(location.search).entries()) {
+            this.query[key] = isNaN(Number(value))
+                ? value.toLowerCase() == 'true' || value.toLowerCase() == 'false'
+                    ? Boolean(value.toLowerCase())
+                    : value
+                : Number(value);
+        }
+    }
+
+    ['']() {
+        el.body.appendChild(views.homeTemplate(
+            "It's Elemental",
+            "A boilerplate framework for TypeScript web development."
+        ));
+        views.home();
+    }
+
+    view() {
+        const view = this[this.path[0]].bind(this);
+        if (typeof view !== 'function') {
+            getHtml(location.pathname)
+            .then((page) => {
+                if (page instanceof HTMLElement) {
+                    el.body.appendChild(page);
+                } else if (page instanceof NodeList) {
+                    page.forEach((element) => {
+                        el.body.appendChild(element);
+                    });
+                }
+
+                if (el.nav.nextElementSibling === null) {
+                    el.body.appendChild(views.homeTemplate('404', 'Page Not Found'));
+                    views.home();
+                }
+            }
+        });
+        } else {
+            view();
+        }
+    }
+    [key: string]: any;
+}`}
+                </code>
+                <p>
+                    <code>RoutesBase</code> looks complicated so that <code>Routes</code> can be simple.
+                </p>
+                <p>
+                    As you know, the path is being passed in as an array. So, what the <code>view()</code> function does is call whatever function corresponds to the first string in the array. If there's no function that corresponds to that string, it defaults to the server first, and if that returns nothing, it serves a 404 page.
                 </p>
                 <p>
                     If the URL is just <code>/</code>, then the first string in the array will be blank (even after shifting it in <code>main.ts</code>). So, the <code>['']()</code> function is called, which serves the home page. See what I did there? The Routes class is an object with functions that are indexed by the strings of the paths in the array. So, when <code>view()</code> sees that the string is blank, it calls <code>['']()</code> which, in turn, calls up <code>el.body</code> and appends the home page to it. Which, in this case, takes two arguments: a title and a subtitle. Then, it calls <code>views.home()</code> which is the controller for the home page.
