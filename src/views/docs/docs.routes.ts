@@ -47,9 +47,9 @@ export default class DocsRoutes extends Routes {
     }
 
     ['faq']() {
-        // el.body.appendChild(
-        //     views.docsTemplate.faqTemplate
-        // );
+        el.body.appendChild(
+            views.docsTemplate.faqTemplate()
+        );
         views.docs();
     }
 }

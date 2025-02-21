@@ -5,6 +5,7 @@ import requestServiceTemplate from './requestService/requestService.template';
 import routesTemplate from './routes/routes.template';
 import theServer from './theServer/theServer.template';
 import viewsTemplate from './views/views.template';
+import faqTemplate from './faq/faq.template';
 
 const docsTemplate = () => html`
         <el-docs>
@@ -28,4 +29,5 @@ docsTemplate.viewsTemplate = viewsTemplate;
 docsTemplate.routesTemplate = routesTemplate;
 docsTemplate.requestServiceTemplate = requestServiceTemplate;
 docsTemplate.theServer = theServer;
+docsTemplate.faqTemplate = faqTemplate;
 export default docsTemplate;
