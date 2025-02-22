@@ -6,14 +6,16 @@ const gettingStartedTemplate = () => html`
             <section>
                 <h1>Getting Started</h1>
                 <h4>TL;DR</h4>
-                <pre><code>
+                <pre>
+                    <code class="language-plaintext">
 git clone https://github.com/lordsteve/elemental.git<br>
 git init {new-project-name}<br>
 cp -r elemental/* {new-project-name}/<br>
 cd {new-project-name}<br>
 npm install<br>
 npm run dev
-                </code></pre>
+                    </code>
+                </pre>
 
                 <h4>Prerequisites</h4>
                 <p>
@@ -25,20 +27,20 @@ npm run dev
                     Once you have those, you can clone the Elemental repository onto your computer and then copy the files into a new project folder. So, open git bash and run the following commands:
                 </p>
                 <pre>
-                    <code>
+                    <code class="language-plaintext">
 git clone https://github.com/lordsteve/elemental.git<br>
 git init {new-project-name}<br>
 cp -r elemental/* {new-project-name}/
                     </code>
                 </pre>
                 <p>
-                    This will ensure you have all the necessary files to start a new project with Elemental. You can go ahead and delete the docs folder at <code>src/views/docs</code> to start fresh.
+                    This will ensure you have all the necessary files to start a new project with Elemental. You can go ahead and delete the docs folder at <code class="language-plaintext">src/views/docs</code> to start fresh. This will require you to also delete any docs references in the <code class="language-plaintext">src/views/main.ts</code> file and <code class="language-plaintext">src/routes.ts</code>.
                 </p>
                 <p>
                     Next, navigate to the new project folder and install the dependencies.
                 </p>
                 <pre>
-                    <code>
+                    <code class="language-plaintext">
 cd {new-project-name}<br>
 npm install
                     </code>
@@ -51,7 +53,7 @@ npm install
                 <p>
                     Once the dependencies are installed, you can run the project in development mode.
                 </p>
-                <code>
+                <code class="language-plaintext">
                     npm run dev
                 </code>
                 <p>

@@ -6,14 +6,14 @@ const viewsTemplate = () => html`
             <section>
                 <h1>Views</h1>
                 <p>
-                    Views consist of two main parts: templates, and controllers. Templates are the HTML structure of the view, and controllers are the JavaScript that controls the view. In Elemental, view templates are written in TypeScript as a const function reference that returns an HTML tagged template literal and the controller is a function that is called after the template is loaded in the Route file. Each view will be put inside of a folder with the same name as the view. This folder will contain <code>{viewName}.template.ts</code> and <code>{viewName}.ctrl.ts</code> files and <code>{viewName}.css</code> if you want to include styles. Views can apply to pages, or to components that are used in multiple pages or multiple times in a page.
+                    Views consist of two main parts: templates, and controllers. Templates are the HTML structure of the view, and controllers are the JavaScript that controls the view. In Elemental, view templates are written in TypeScript as a const function reference that returns an HTML tagged template literal and the controller is a function that is called after the template is loaded in the Route file. Each view will be put inside of a folder with the same name as the view. This folder will contain <code class="language-typescript">{viewName}.template.ts</code> and <code class="language-typescript">{viewName}.ctrl.ts</code> files and <code class="language-typescript">{viewName}.css</code> if you want to include styles. Views can apply to pages, or to components that are used in multiple pages or multiple times in a page.
                 </p>
                 <h4>Template</h4>
                 <p>
-                    View templates should always start out by importing the html template literal tag from the elements service. Once you do that, you can start writing the page in a familiar HTML format after starting with <code>const {viewName} = () => html</code>. The end result will look something like this:
+                    View templates should always start out by importing the html template literal tag from the elements service. Once you do that, you can start writing the page in a familiar HTML format after starting with <code class="language-typescript">const {viewName} = () => html</code>. The end result will look something like this:
                 </p>
                 <pre>
-                    <code>
+                    <code class="language-typescript">
 import { html } from '@services/elements';<br>
 <br>
 const helloWorldTemplate = () => html${escapeHtml`\``}<br>
@@ -25,10 +25,10 @@ export default helloWorldTemplate;
                     </code>
                 </pre>
                 <p>
-                    There is, however, one important thing missing from the above code. And that's the view name tag. The outter most tag of the template should be named the same as the view name with the 'el-' prefix in front of it. So, if the view name is <code>helloWorld</code>, the outter most tag should be <code>&lt;el-hello-world&gt;</code>. This will end up being how the Elements service and the CSS will look for this view. So, the above code should look like this:
+                    There is, however, one important thing missing from the above code. And that's the view name tag. The outter most tag of the template should be named the same as the view name with the 'el-' prefix in front of it. So, if the view name is <code class="language-typescript">helloWorld</code>, the outter most tag should be <code class="language-html">&lt;el-hello-world&gt;</code>. This will end up being how the Elements service and the CSS will look for this view. So, the above code should look like this:
                 </p>
                 <pre>
-                    <code>
+                    <code class="language-typescript">
 import { html } from '@services/elements';<br>
 <br>
 const helloWorldTemplate = () => html${escapeHtml`\``}<br>
@@ -97,10 +97,10 @@ export default helloWorldTemplate;
                     Be careful the amount of functionality you try to provide in the template, though. Most of the functionality should be provided in the controller. The template should remain as simple as possible.
                 </p>
                 <p>
-                    The last thing you should know about templates is how to handle sub-views. When you navigate to a page, sometimes you'll want to organize that section of the app into deeper views. For example, this page is in the <code>docs</code> section, with a sub-view of <code>views</code> because you can see that the URL is <code>/docs/views</code>. This should be done by creating another view folder within the parent view folder, importing the child view and then tacking it onto the parent view template. For example, if you had a <code>home</code> view and you wanted to add a <code>helloWorld</code> view to it, you would do it like this:
+                    The last thing you should know about templates is how to handle sub-views. When you navigate to a page, sometimes you'll want to organize that section of the app into deeper views. For example, this page is in the <code  class="language-typescript">docs</code> section, with a sub-view of <code class="language-typescript">views</code> because you can see that the URL is <code class="language-typescript">/docs/views</code>. This should be done by creating another view folder within the parent view folder, importing the child view and then tacking it onto the parent view template. For example, if you had a <code class="language-typescript">home</code> view and you wanted to add a <code class="language-typescript">helloWorld</code> view to it, you would do it like this:
                 </p>
                 <pre>
-                    <code>
+                    <code class="language-typescript">
 import { html } from '@services/elements';<br>
 import helloWorldTemplate from './helloWorld/helloWorld.template';<br>
 <br>
@@ -116,14 +116,14 @@ export default homeTemplate;
                     </code>
                 </pre>
                 <p>
-                    This will allow you to access the <code>helloWorld</code> view from the Routes file when it detects that a sub-view is being requested. (We'll get into how the Routes file works later.)
+                    This will allow you to access the <code class="language-typescript">helloWorld</code> view from the Routes file when it detects that a sub-view is being requested. (We'll get into how the Routes file works later.)
                 </p>
                 <h4>Controller</h4>
                 <p>
-                    An important thing to remember about a controller is that it's activated <i>after</i> the template is loaded. So anything you create in the template will be available to the controller. And you'll be able to do this by importing the Elements service. The controller should be a function that is exported and called in the Routes file. Let's create a new controller for the <code>helloWorld</code> view. You would start out doing this:
+                    An important thing to remember about a controller is that it's activated <i>after</i> the template is loaded. So anything you create in the template will be available to the controller. And you'll be able to do this by importing the Elements service. The controller should be a function that is exported and called in the Routes file. Let's create a new controller for the <code class="language-typescript">helloWorld</code> view. You would start out doing this:
                 </p>
                 <pre>
-                    <code>
+                    <code class="language-typescript">
 import el from '@services/elements';<br>
 <br>
 export function helloWorld() {<br>
@@ -136,10 +136,10 @@ export function helloWorld() {<br>
                     The above code will set the title of the page (the text written in the browser tab) to 'Hello World!' and log the function to the console. This is a very simple example, but you can see how you can manipulate the DOM and the data in the view from the controller utilizing the Elements service.
                 </p>
                 <p>
-                    Let's say you created a <code>${escapeHtml`<button>`}</code> in the template and you wanted to add an onclick function to it. First you would give it an id in the template like this:
+                    Let's say you created a <code class="language-html">${escapeHtml`<button>`}</code> in the template and you wanted to add an onclick function to it. First you would give it an id in the template like this:
                 </p>
                 <pre>
-                    <code>
+                    <code class="language-typescript">
 import { html } from '@services/elements';<br>
 <br>
 const helloWorldTemplate = () => html${escapeHtml`\``}<br>
@@ -157,7 +157,7 @@ export default helloWorldTemplate;
                     Then you would add the function to the button in the controller like this:
                 </p>
                 <pre>
-                    <code>
+                    <code class="language-typescript">
 import el from '@services/elements';<br>
 <br>
 export function helloWorld() {<br>
@@ -176,14 +176,14 @@ export function helloWorld() {<br>
                     Also, if you're unfamiliar with that if statement syntax, it's a shorthand way of writing it that works if you only have one line of code to execute.
                 </p>
                 <p>
-                    Also, also, it's good practice to use <code>.onclick</code> rather than <code>.addEventListener('click', () => {})</code>. Event listeners always have to be removed when you're done with them or else they could cause memory leaks. And, although most modern browsers will clean up after you, it's still better to be safe than sorry. The only exception to this is if you wanna add multiple event listeners for the same event to the same element at the same time, or you wanna get fancy with the event propogation. Then you should use <code>.addEventListener</code> and remove them all when you're done.
+                    Also, also, it's good practice to use <code class="language-typescript">.onclick</code> rather than <code class="language-typescript">.addEventListener('click', () => {})</code>. Event listeners always have to be removed when you're done with them or else they could cause memory leaks. And, although most modern browsers will clean up after you, it's still better to be safe than sorry. The only exception to this is if you wanna add multiple event listeners for the same event to the same element at the same time, or you wanna get fancy with the event propogation. Then you should use <code class="language-typescript">.addEventListener</code> and remove them all when you're done.
                 </p>
                 <h4>Styles</h4>
                 <p>
-                    Styles for the view should be written in a CSS file in the same folder with the same name as the view. For example, the styles for the <code>helloWorld</code> view should be written in a file called <code>helloWorld.css</code>. All CSS files are imported into the base <code>views/index.css</code> file like this:
+                    Styles for the view should be written in a CSS file in the same folder with the same name as the view. For example, the styles for the <code class="language-typescript">helloWorld</code> view should be written in a file called <code>helloWorld.css</code>. All CSS files are imported into the base <code>views/index.css</code> file like this:
                 </p>
                 <pre>
-                    <code>
+                    <code class="language-css">
 @import './helloWorld/helloWorld.css';
                     </code>
                 </pre>
@@ -191,7 +191,7 @@ export function helloWorld() {<br>
                     This will ensure that all the CSS files are loaded, but they are still separated by view so it's easier to find and manipulate them. Another good practice is to utilize the view name that you created for the view's tag name when writing CSS that is specific to that view. Like this:
                 </p>
                 <pre>
-                    <code>
+                    <code class="language-css">
 el-hello-world .example-class {<br>
 &nbsp;&nbsp;display: flex;<br>
 &nbsp;&nbsp;justify-content: center;<br>
@@ -200,14 +200,14 @@ el-hello-world .example-class {<br>
                     </code>
                 </pre>
                 <p>
-                    If you want to write global styles that apply to all views, you can write them in the <code>main.css</code> file. This is where you would put things like the body styles or the styles for global text or default buttons, etc.
+                    If you want to write global styles that apply to all views, you can write them in the <code css="language-plaintext">main.css</code> file. This is where you would put things like the body styles or the styles for global text or default buttons, etc.
                 </p>
                 <h4>View Index</h4>
                 <p>
                     The last thing you need to know about views is very simple, but very important. They are all imported and exported into the base <code>views/index.ts</code> file. This is so that the Routes file can access them all at once. This file should look something like this:
                 </p>
                 <pre>
-                    <code>
+                    <code class="language-typescript">
 import helloWorldTemplate from './helloWorld/helloWorld.template';<br>
 import { helloWorld } from './helloWorld/helloWorld.ctrl';<br>
 <br>
@@ -217,7 +217,7 @@ export { default as helloWorld } from './helloWorld/helloWorld.ctrl';<br>
 const views = {<br>
 &nbsp;&nbsp;helloWorldTemplate,<br>
 &nbsp;&nbsp;helloWorld<br>
-};
+};<br>
 <br>
 export default views;
                     </code>
