@@ -218,7 +218,7 @@ import DocsRoutes from './docs/docs.routes';<br>
 ...<br>
 export { default as DocsRoutes } from './docs/docs.routes';<br>
 <br>
-conts views = {<br>
+const views = {<br>
 &nbsp;&nbsp;...<br>
 &nbsp;&nbsp;DocsRoutes<br>
 }<br>
