@@ -164,9 +164,6 @@ export default class RoutesBase {
                     import Routes from '@routes';<br>
                     <br>
                     export default class DocsRoutes extends Routes {<br>
-                    &nbsp;&nbsp;constructor(public path: string[]) {<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;super(path);<br>
-                    &nbsp;&nbsp;}<br>
                     <br>
                     &nbsp;&nbsp;['getting-started']() {<br>
                     &nbsp;&nbsp;&nbsp;&nbsp;el.body.appendChild(<br>
@@ -209,7 +206,7 @@ export default class RoutesBase {
                     }
                 </code>
                 <p>
-                    This sub-route file will already have the <code>view()</code> function and <code>query</code> property from the <code>Routes</code> class, so you don't have to worry about those. (Don't worry, I'll get to the <code>query</code> property!) Just add the function for the sub-view you want to serve.
+                    This sub-route file will already have the <code>view()</code> function and <code>query</code> property from the <code>RoutesBase</code> class, so you don't have to worry about those. (Don't worry, I'll get to the <code>query</code> property!) Just add the function for the sub-view you want to serve.
                 </p>
                 <p>
                     The sub-route file should be saved in the same directory as the view file it's serving. So, if you're adding a sub-view for the <code>/docs</code> page, you should save the file as <code>docs.routes.ts</code> in the <code>docs</code> directory. Then it should be imported and exported in the <code>views/index.ts</code> file like this:
@@ -235,13 +232,13 @@ export default class RoutesBase {
                     The <code>query</code> property is a property of the <code>Routes</code> class that is an object with all the query parameters from the URL. It's set up in the constructor like this:
                 </p>
                 <code>
-                    new URLSearchParams(location.search).entries().forEach((entry) => {<br>
-                    &nbsp;&nbsp;this.query[entry[0]] = isNaN(Number(entry[1]))<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;? entry[1].toLowerCase() == 'true' || entry[1].toLowerCase() == 'false'<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;? Boolean(entry[1].toLowerCase())<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: entry[1]<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;: Number(entry[1]);<br>
-                    });
+${escapeHtml`for (const [key, value] of new URLSearchParams(location.search).entries()) {
+    this.query[key] = isNaN(Number(value))
+        ? value.toLowerCase() == 'true' || value.toLowerCase() == 'false'
+            ? Boolean(value.toLowerCase())
+            : value
+        : Number(value);
+}`}
                 </code>
                 <p>
                     So, as you can see, it's just taking the query parameters from the URL and adding them to the <code>query</code> object. If the query parameter is a number, it adds it as a number. If it's a boolean, it adds it as a boolean. Otherwise, it adds it as a string. So, if you have a URL like <code>/about?name=John&age=30&isCool=true</code>, the <code>query</code> object will look like this:
