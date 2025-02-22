@@ -1,4 +1,4 @@
-import { escapeHtml, html } from "@services/elements";
+import { html } from "@services/elements";
 
 const theServer = () => html`
     <el-docs>
@@ -57,7 +57,7 @@ const theServer = () => html`
                     When you create new entities, you should put them in the <code>server/services/database/entity</code> directory. This is where the server will look for them. After you create or edit your entities, the migration for them should go in the <code>server/services/database/migration</code> directory, but you're not gonna just create a new file and put it in there. We've got a script set up for generating migrations. You can run <code>npm run migration:generate server/services/database/migration/{migration name}</code> to create a new migration file. This will create a new file in the <code>server/services/database/migration</code> directory that you can then run with <code>npm run migration:run</code>. And if you mess it up, you can run <code>npm run migration:revert</code> to revert the last migration.
                 </p>
                 <p>
-                    <code>data-source.ts</code> will use environment variables to connect to the database. If your system doesn't have environment variables, you can use a <code>.env</code> file to set them up. You can see an example of this in the <code>.env.example</code> file. You must have variables for, <code>DB_HOST</code>, <code>DB_PORT</code>, <code>DB_USER</code>, <code>DB_PASS</code>, and <code>DB_NAME</code>. In <code>data-source.ts</code> you can also set the type of database that you're using. By default we use mysql, but you can change it to whatever you want. You could also set that up to use an environment variable if you're into that kind of thing.
+                    <code>data-source.ts</code> will use environment variables to connect to the database. If your system doesn't have environment variables, you can use a <code>.env</code> file to set them up. You can see an example of this in the <code>.env.example</code> file. You must have variables for, <code>DB_HOST</code>, <code>DB_PORT</code>, <code>DB_USER</code>, <code>DB_PASS</code>, and <code>DB_NAME</code>. In <code>data-source.ts</code> you can also set the type of database that you're using. By default we use mysql, but you can change it to whatever you want that's supported by TypeORM. You could also set that up to use an environment variable if you're into that kind of thing.
                 </p>
             </section>
         </div>
