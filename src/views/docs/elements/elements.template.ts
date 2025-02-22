@@ -74,25 +74,29 @@ const elementsTemplate = () => html`
                 <p>
                     Tagged template literals are a relatively new feature in JavaScript that allows you to take a literal string and parse it with a function. In this case, the <code>html</code> function takes the string and returns an element. it works like this:
                 </p>
-                <code>
-                    const myElement = html${escapeHtml`\``}<br>
-                    ${escapeHtml`  <div>`}<br>
-                    ${escapeHtml`    <p>My paragraph $\{including a variable\}</p>`}<br>
-                    ${escapeHtml`  </div>`}<br>
-                    ${escapeHtml`\``};
-                </code>
+                <pre>
+                    <code>
+const myElement = html${escapeHtml`\``}<br>
+${escapeHtml`  <div>`}<br>
+${escapeHtml`    <p>My paragraph $\{including a variable}</p>`}<br>
+${escapeHtml`  </div>`}<br>
+${escapeHtml`\``};
+                    </code>
+                </pre>
                 <p>
                     As you can see, a tagged template literal is used by immediately following the function name with a tick mark. In the Elements service, that function looks like this:
                 </p>
-                <code>
-                    export function html(html: TemplateStringsArray, ...values: any[]): HTMLElement {<br>
-                    &nbsp;&nbsp;let string: string = '';<br>
-                    &nbsp;&nbsp;html.forEach((str, i) => string += str + (values[i] ?? ''));<br>
-                    &nbsp;&nbsp;const template = document.createElement('template');<br>
-                    &nbsp;&nbsp;template.innerHTML = string.trim();<br>
-                    &nbsp;&nbsp;return template.content.firstChild as HTMLElement;<br>
-                    }
-                </code>
+                <pre>
+                    <code>
+export function html(html: TemplateStringsArray, ...values: any[]): HTMLElement {<br>
+&nbsp;&nbsp;let string: string = '';<br>
+&nbsp;&nbsp;html.forEach((str, i) => string += str + (values[i] ?? ''));<br>
+&nbsp;&nbsp;const template = document.createElement('template');<br>
+&nbsp;&nbsp;template.innerHTML = string.trim();<br>
+&nbsp;&nbsp;return template.content.firstChild as HTMLElement;<br>
+}
+                    </code>
+                </pre>
                 <p>
                     The <code>html</code> parameter is a <code>TemplateStringsArray</code>, which is an array of strings that are the literal parts of the template literal divided by the values that are passed in by the <code>${escapeHtml`$\{\}`}</code>. The <code>values</code> parameter is a rest parameter that takes all the values that are passed into the template literal. The function then loops through the <code>html</code> array and adds the literal parts of the template literal to the <code>string</code> variable. If there are values passed in, it adds those as well. It then creates a <code>template</code> element, sets the <code>innerHTML</code> to the <code>string</code> variable, and returns the first child of the <code>content</code> property of the <code>template</code> element as an <code>HTMLElement</code>.
                 </p>

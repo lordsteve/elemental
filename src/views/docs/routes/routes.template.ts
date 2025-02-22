@@ -12,21 +12,21 @@ const routesTemplate = () => html`
                 <p>
                     So, <code>main.ts</code> looks like this, right?:
                 </p>
-                <code>
-                    import el from '@services/elements';<br>
-                    import { initLoader } from '@services/request';<br>
-                    import views from '@views';<br>
-                    import Routes from './routes';<br>
-                    <br>
-                    initLoader();<br>
-                    <br>
-                    const path = window.location.pathname.split('/');<br>
-                    path.shift();<br>
-                    <br>
-                    el.body.appendChild(views.navTemplate());<br>
-                    views.nav();<br>
-                    new Routes(path).view();
-                </code>
+                <pre><code>
+import el from '@services/elements';<br>
+import { initLoader } from '@services/request';<br>
+import views from '@views';<br>
+import Routes from './routes';<br>
+<br>
+initLoader();<br>
+<br>
+const path = window.location.pathname.split('/');<br>
+path.shift();<br>
+<br>
+el.body.appendChild(views.navTemplate());<br>
+views.nav();<br>
+new Routes(path).view();
+                </code></pre>
                 <p>
                     Note that <code>el.body.appendChild(views.navTemplate()); views.nav();</code> is optional. It's just there to add the navigation bar to every single page you load. You can remove it if you don't want it.
                 </p>
@@ -36,86 +36,86 @@ const routesTemplate = () => html`
                 <p>
                     The Routes class is set up like this:
                 </p>
-                <code>
-${escapeHtml`import el from "@services/elements";
-import views from "@views";
-import RoutesBase from "./routes.base";
-
-export default class Routes extends RoutesBase {
-
-    ['about']() {
-        el.body.appendChild(views.aboutTemplate());
-        views.about();
-    }
-
-    ['docs']() {
-        if (this.path[1]) {
-            this.path.shift();
-            new views.DocsRoutes(this.path).view();
-        } else {
-            el.body.appendChild(views.docsTemplate());
-            views.docs();
-        }
-    }
-
-}`}
-                </code>
+                <pre><code>
+import el from "@services/elements";<br>
+import views from "@views";<br>
+import RoutesBase from "./routes.base";<br>
+<br>
+export default class Routes extends RoutesBase {<br>
+<br>
+    ['about']() {<br>
+        el.body.appendChild(views.aboutTemplate());<br>
+        views.about();<br>
+    }<br>
+<br>
+    ['docs']() {<br>
+        if (this.path[1]) {<br>
+            this.path.shift();<br>
+            new views.DocsRoutes(this.path).view();<br>
+        } else {<br>
+            el.body.appendChild(views.docsTemplate());<br>
+            views.docs();<br>
+        }<br>
+    }<br>
+<br>
+}<br>
+                </code></pre>
                 <p>
                     But the really important part is in the <code>RoutesBase</code> class, which is set up like this:
                 </p>
-                <code>
-${escapeHtml`import el from "@services/elements";
-import { getHtml } from "@services/request";
-import views from "@views";
-
-export default class RoutesBase {
-    query: {[key: string]: any} = {};
-    constructor(
-        public path: string[]
-    ) {
-        for (const [key, value] of new URLSearchParams(location.search).entries()) {
-            this.query[key] = isNaN(Number(value))
-                ? value.toLowerCase() == 'true' || value.toLowerCase() == 'false'
-                    ? Boolean(value.toLowerCase())
-                    : value
-                : Number(value);
-        }
-    }
-
-    ['']() {
-        el.body.appendChild(views.homeTemplate(
-            "It's Elemental",
-            "A boilerplate framework for TypeScript web development."
-        ));
-        views.home();
-    }
-
-    view() {
-        const view = this[this.path[0]].bind(this);
-        if (typeof view !== 'function') {
-            getHtml(location.pathname)
-            .then((page) => {
-                if (page instanceof HTMLElement) {
-                    el.body.appendChild(page);
-                } else if (page instanceof NodeList) {
-                    page.forEach((element) => {
-                        el.body.appendChild(element);
-                    });
-                }
-
-                if (el.nav.nextElementSibling === null) {
-                    el.body.appendChild(views.homeTemplate('404', 'Page Not Found'));
-                    views.home();
-                }
-            }
-        });
-        } else {
-            view();
-        }
-    }
-    [key: string]: any;
-}`}
-                </code>
+                <pre><code>
+import el from "@services/elements";<br>
+import { getHtml } from "@services/request";<br>
+import views from "@views";<br>
+<br>
+export default class RoutesBase {<br>
+    query: {[key: string]: any} = {};<br>
+    constructor(<br>
+        public path: string[]<br>
+    ) {<br>
+        for (const [key, value] of new URLSearchParams(location.search).entries()) {<br>
+            this.query[key] = isNaN(Number(value))<br>
+                ? value.toLowerCase() == 'true' || value.toLowerCase() == 'false'<br>
+                    ? Boolean(value.toLowerCase())<br>
+                    : value<br>
+                : Number(value);<br>
+        }<br>
+    }<br>
+<br>
+    ['']() {<br>
+        el.body.appendChild(views.homeTemplate(<br>
+            "It's Elemental",<br>
+            "A boilerplate framework for TypeScript web development."<br>
+        ));<br>
+        views.home();<br>
+    }<br>
+<br>
+    view() {<br>
+        const view = this[this.path[0]].bind(this);<br>
+        if (typeof view !== 'function') {<br>
+            getHtml(location.pathname)<br>
+            .then((page) => {<br>
+                if (page instanceof HTMLElement) {<br>
+                    el.body.appendChild(page);<br>
+                } else if (page instanceof NodeList) {<br>
+                    page.forEach((element) => {<br>
+                        el.body.appendChild(element);<br>
+                    });<br>
+                }<br>
+<br>
+                if (el.nav.nextElementSibling === null) {<br>
+                    el.body.appendChild(views.homeTemplate('404', 'Page Not Found'));<br>
+                    views.home();<br>
+                }<br>
+            }<br>
+        });<br>
+        } else {<br>
+            view();<br>
+        }<br>
+    }<br>
+    [key: string]: any;<br>
+}<br>
+                </code></pre>
                 <p>
                     <code>RoutesBase</code> looks complicated so that <code>Routes</code> can be simple.
                 </p>
@@ -128,26 +128,26 @@ export default class RoutesBase {
                 <p>
                     So, that means if you want to add a new page, all you have to do is add a new function indexed by the string of the path you want to serve. For example, if you want to add a page at <code>/about</code>, you would add a function like this:
                 </p>
-                <code>
-                    ['about']() {<br>
-                    &nbsp;&nbsp;el.body.appendChild(views.aboutTemplate());<br>
-                    &nbsp;&nbsp;views.about();<br>
-                    }
-                </code>
+                <pre><code>
+['about']() {<br>
+&nbsp;&nbsp;el.body.appendChild(views.aboutTemplate());<br>
+&nbsp;&nbsp;views.about();<br>
+}
+                </code></pre>
                 <p>
                     If you want to add a view that has sub-views, you'll have to check if there are any further strings in the path array. For example, if you want to add a page at <code>/docs</code> that has sub-views for <code>/getting-started</code>, <code>/elements</code>, <code>/routes</code>, <code>/views</code>, and <code>/faq</code>, you would add a function like this:
                 </p>
-                <code>
-                    ['docs']() {<br>
-                    &nbsp;&nbsp;if (this.path[1]) {<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;this.path.shift();<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;new views.DocsRoutes(this.path).view();<br>
-                    &nbsp;&nbsp;} else {<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;el.body.appendChild(views.docsTemplate());<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;views.docs();<br>
-                    &nbsp;&nbsp;}<br>
-                    }
-                </code>
+                <pre><code>
+['docs']() {<br>
+&nbsp;&nbsp;if (this.path[1]) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;this.path.shift();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;new views.DocsRoutes(this.path).view();<br>
+&nbsp;&nbsp;} else {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;el.body.appendChild(views.docsTemplate());<br>
+&nbsp;&nbsp;&nbsp;&nbsp;views.docs();<br>
+&nbsp;&nbsp;}<br>
+}
+                </code></pre>
                 <p>
                     Oh, look! There's a new routes class in there! I'll get to that in a second, but first, I should explain that this function is checking if there's a second string in the array, and if there is, it knocks off the first string and passes the rest. If there's not, it'll just serve the docs page.
                 </p>
@@ -158,72 +158,72 @@ export default class RoutesBase {
                 <p>
                     The <code>DocsRoutes</code> class is set up like this:
                 </p>
-                <code>
-                    import el, { html } from '@services/elements';<br>
-                    import views from '@views';<br>
-                    import Routes from '@routes';<br>
-                    <br>
-                    export default class DocsRoutes extends Routes {<br>
-                    <br>
-                    &nbsp;&nbsp;['getting-started']() {<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;el.body.appendChild(<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;views.docsTemplate.gettingStarted()<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;);<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;views.docs();<br>
-                    &nbsp;&nbsp;}<br>
-                    <br>
-                    &nbsp;&nbsp;['elements']() {<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;el.body.appendChild(<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;views.docsTemplate.elementsTemplate()<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;);<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;views.docs();<br>
-                    &nbsp;&nbsp;}<br>
-                    <br>
-                    &nbsp;&nbsp;['routes']() {<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;el.body.appendChild(<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;views.docsTemplate.routesTemplate()<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;);<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;views.docs();<br>
-                    &nbsp;&nbsp;}<br>
-                    <br>
-                    &nbsp;&nbsp;['views']() {<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;el.body.appendChild(<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;views.docsTemplate.viewsTemplate()<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;);<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;views.docs();<br>
-                    &nbsp;&nbsp;}<br>
-                    }
-                </code>
+                <pre><code>
+import el, { html } from '@services/elements';<br>
+import views from '@views';<br>
+import Routes from '@routes';<br>
+<br>
+export default class DocsRoutes extends Routes {<br>
+<br>
+&nbsp;&nbsp;['getting-started']() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;el.body.appendChild(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;views.docsTemplate.gettingStarted()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;views.docs();<br>
+&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;['elements']() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;el.body.appendChild(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;views.docsTemplate.elementsTemplate()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;views.docs();<br>
+&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;['routes']() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;el.body.appendChild(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;views.docsTemplate.routesTemplate()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;views.docs();<br>
+&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;['views']() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;el.body.appendChild(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;views.docsTemplate.viewsTemplate()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;views.docs();<br>
+&nbsp;&nbsp;}<br>
+}
+                </code></pre>
                 <p>
                     So, the <code>DocsRoutes</code> class is just an extension of the <code>Routes</code> class. It's set up the same way, but it has functions for each of the sub-views of the <code>/docs</code> page. So, if you want to add a new sub-view, you just add a new function indexed by the string of the path you want to serve. For example, if you want to add a page at <code>/docs/faq</code>, you would add a function like this:
                 </p>
-                <code>
-                    ['faq']() {<br>
-                    &nbsp;&nbsp;el.body.appendChild(<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;views.docsTemplate.faqTemplate<br>
-                    &nbsp;&nbsp;);<br>
-                    &nbsp;&nbsp;views.docs();<br>
-                    }
-                </code>
+                <pre><code>
+['faq']() {<br>
+&nbsp;&nbsp;el.body.appendChild(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;views.docsTemplate.faqTemplate<br>
+&nbsp;&nbsp;);<br>
+&nbsp;&nbsp;views.docs();<br>
+}
+                </code></pre>
                 <p>
                     This sub-route file will already have the <code>view()</code> function and <code>query</code> property from the <code>RoutesBase</code> class, so you don't have to worry about those. (Don't worry, I'll get to the <code>query</code> property!) Just add the function for the sub-view you want to serve.
                 </p>
                 <p>
                     The sub-route file should be saved in the same directory as the view file it's serving. So, if you're adding a sub-view for the <code>/docs</code> page, you should save the file as <code>docs.routes.ts</code> in the <code>docs</code> directory. Then it should be imported and exported in the <code>views/index.ts</code> file like this:
                 </p>
-                <code>
-                    ...<br>
-                    import DocsRoutes from './docs/docs.routes';<br>
-                    <br>
-                    ...<br>
-                    export { default as DocsRoutes } from './docs/docs.routes';<br>
-                    <br>
-                    conts views = {<br>
-                    &nbsp;&nbsp;...<br>
-                    &nbsp;&nbsp;DocsRoutes<br>
-                    }<br>
-                    export default views;
-                </code>
+                <pre><code>
+...<br>
+import DocsRoutes from './docs/docs.routes';<br>
+<br>
+...<br>
+export { default as DocsRoutes } from './docs/docs.routes';<br>
+<br>
+conts views = {<br>
+&nbsp;&nbsp;...<br>
+&nbsp;&nbsp;DocsRoutes<br>
+}<br>
+export default views;
+                </code></pre>
                 <p>
                     Now the <code>DocsRoutes</code> class is available to be used in the <code>routes.ts</code> file. And now, as promised:
                 </p>
@@ -231,47 +231,47 @@ export default class RoutesBase {
                 <p>
                     The <code>query</code> property is a property of the <code>Routes</code> class that is an object with all the query parameters from the URL. It's set up in the constructor like this:
                 </p>
-                <code>
-${escapeHtml`for (const [key, value] of new URLSearchParams(location.search).entries()) {
-    this.query[key] = isNaN(Number(value))
-        ? value.toLowerCase() == 'true' || value.toLowerCase() == 'false'
-            ? Boolean(value.toLowerCase())
-            : value
-        : Number(value);
-}`}
-                </code>
+                <pre><code>
+for (const [key, value] of new URLSearchParams(location.search).entries()) {<br>
+    this.query[key] = isNaN(Number(value))<br>
+        ? value.toLowerCase() == 'true' || value.toLowerCase() == 'false'<br>
+            ? Boolean(value.toLowerCase())<br>
+            : value<br>
+        : Number(value);<br>
+}
+                </code></pre>
                 <p>
                     So, as you can see, it's just taking the query parameters from the URL and adding them to the <code>query</code> object. If the query parameter is a number, it adds it as a number. If it's a boolean, it adds it as a boolean. Otherwise, it adds it as a string. So, if you have a URL like <code>/about?name=John&age=30&isCool=true</code>, the <code>query</code> object will look like this:
                 </p>
-                <code>
-                    {<br>
-                    &nbsp;&nbsp;name: 'John',<br>
-                    &nbsp;&nbsp;age: 30,<br>
-                    &nbsp;&nbsp;isCool: true<br>
-                    }
-                </code>
+                <pre><code>
+{<br>
+&nbsp;&nbsp;name: 'John',<br>
+&nbsp;&nbsp;age: 30,<br>
+&nbsp;&nbsp;isCool: true<br>
+}
+                </code></pre>
                 <p>
                     So, if you want to use the query parameters in your view, you can just pass the query into the view template or controller like this:
                 </p>
-                <code>
-                    ['about']() {<br>
-                    &nbsp;&nbsp;el.body.appendChild(views.aboutTemplate(this.query));<br>
-                    &nbsp;&nbsp;views.about(this.query);<br>
-                    }
-                </code>
+                <pre><code>
+['about']() {<br>
+&nbsp;&nbsp;el.body.appendChild(views.aboutTemplate(this.query));<br>
+&nbsp;&nbsp;views.about(this.query);<br>
+}
+                </code></pre>
                 <p>
                     And then you can use the query parameters in your view like this:
                 </p>
-                <code>
-                    import el from "@services/elements";<br>
-                    import { escapeHtml, html } from "@services/elements";<br>
-                    <br>
-                    const aboutTemplate = (query: {[key: string]: any}) => html${escapeHtml`\``}<br>
-                    ${escapeHtml`  <h1>About $\{query.name}</h1>`}<br>
-                    ${escapeHtml`\`;`}<br>
-                    <br>
-                    export default aboutTemplate;
-                </code>
+                <pre><code>
+import el from "@services/elements";<br>
+import { escapeHtml, html } from "@services/elements";<br>
+<br>
+const aboutTemplate = (query: {[key: string]: any}) => html${escapeHtml`\``}<br>
+${escapeHtml`  <h1>About $\{query.name}</h1>`}<br>
+${escapeHtml`\`;`}<br>
+<br>
+export default aboutTemplate;
+                </code></pre>
                 <p>
                     And the query parameter will be available in all your sub-route files, too, so just pass it in and use it as needed.
                 </p>

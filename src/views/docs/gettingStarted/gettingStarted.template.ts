@@ -6,14 +6,14 @@ const gettingStartedTemplate = () => html`
             <section>
                 <h1>Getting Started</h1>
                 <h4>TL;DR</h4>
-                <code>
-                    git clone https://github.com/lordsteve/elemental.git<br>
-                    git init {new-project-name}<br>
-                    cp -r elemental/* {new-project-name}/<br>
-                    cd {new-project-name}<br>
-                    npm install<br>
-                    npm run dev
-                </code>
+                <pre><code>
+git clone https://github.com/lordsteve/elemental.git<br>
+git init {new-project-name}<br>
+cp -r elemental/* {new-project-name}/<br>
+cd {new-project-name}<br>
+npm install<br>
+npm run dev
+                </code></pre>
 
                 <h4>Prerequisites</h4>
                 <p>
@@ -24,21 +24,25 @@ const gettingStartedTemplate = () => html`
                 <p>
                     Once you have those, you can clone the Elemental repository onto your computer and then copy the files into a new project folder. So, open git bash and run the following commands:
                 </p>
-                <code>
-                    git clone https://github.com/lordsteve/elemental.git<br>
-                    git init {new-project-name}<br>
-                    cp -r elemental/* {new-project-name}/
-                </code>
+                <pre>
+                    <code>
+git clone https://github.com/lordsteve/elemental.git<br>
+git init {new-project-name}<br>
+cp -r elemental/* {new-project-name}/
+                    </code>
+                </pre>
                 <p>
                     This will ensure you have all the necessary files to start a new project with Elemental. You can go ahead and delete the docs folder at <code>src/views/docs</code> to start fresh.
                 </p>
                 <p>
                     Next, navigate to the new project folder and install the dependencies.
                 </p>
-                <code>
-                    cd {new-project-name}<br>
-                    npm install
-                </code>
+                <pre>
+                    <code>
+cd {new-project-name}<br>
+npm install
+                    </code>
+                </pre>
                 <p>
                     This will install a few different packages that you need to create and run an Elemental project. They include, but are not limited to, TypeScript, TypeORM, reflect-metadata, and a few others.
                 </p>
