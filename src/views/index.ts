@@ -9,6 +9,7 @@ import DocsRoutes from './docs/docs.routes';
 import docsTemplate from './docs/docs.template';
 import sidebar from './sidebar/sidebar.ctrl';
 import sidebarTemplate from './sidebar/sidebar.template';
+import githubButtonTemplate from './github-button/githubButton.template';
 
 export { default as about } from '@views/about/about.ctrl';
 export { default as aboutTemplate } from '@views/about/about.template';
@@ -21,6 +22,7 @@ export { default as DocsRoutes } from './docs/docs.routes';
 export { default as docsTemplate } from './docs/docs.template';
 export { default as sidebar } from './sidebar/sidebar.ctrl';
 export { default as sidebarTemplate } from './sidebar/sidebar.template';
+export { default as githubButtonTemplate } from './github-button/githubButton.template';
 
 const views = {
     home,
@@ -33,6 +35,7 @@ const views = {
     sidebarTemplate,
     docs,
     docsTemplate,
-    DocsRoutes
+    DocsRoutes,
+    githubButtonTemplate
 };
 export default views;
