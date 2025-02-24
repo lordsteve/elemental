@@ -8,16 +8,11 @@ export function initLoader() {
                 el.csrfToken = await oldFetch('/csrf-token').then(response => response.text());
                 options.headers
                     ? options.headers['X-CSRF-TOKEN' as keyof HeadersInit] = el.csrfToken
-                    : options = {
-                        ...options,
-                        headers: {
-                            'X-CSRF-TOKEN': el.csrfToken
-                        }
-                    };
+                    : Object.assign(options, { headers: { 'X-CSRF-TOKEN': el.csrfToken } });
             }
-            if (options && options.headers) options.headers['X-Requested-With' as keyof HeadersInit] = 'Elemental';
-            if (!options) options = { headers: { 'X-Requested-With': 'Elemental' } };
-            if (!options.headers) options.headers = { 'X-Requested-With': 'Elemental' };
+            if (options && options.headers) Object.assign(options.headers, { 'X-Requested-With': 'Elemental' });
+            if (!options) options = { headers: { 'X-Requested-With': 'Elemental' } } as RequestInit;
+            if (!options.headers) options.headers = { 'X-Requested-With': 'Elemental' } as HeadersInit;
             const response = await oldFetch(url, options);
             el.loader.remove();
             return response;

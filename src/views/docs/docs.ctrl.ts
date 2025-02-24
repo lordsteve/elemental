@@ -1,5 +1,6 @@
 import el from "@services/elements";
 import sidebarTemplate from "@views/sidebar/sidebar.template";
+import Helpers from "@services/helpers";
 
 export default function docs() {
     el.title.textContent = "Elemental Documentation";
@@ -16,4 +17,10 @@ export default function docs() {
         "/docs/the-server": "The Server",
         "/docs/faq": "FAQ"
     }), docs.firstChild);
+
+    const section = el.sections ? el.sections[0] : null;
+    if (section) {
+        Helpers.centerSection(section);
+        window.addEventListener('resize', () => Helpers.centerSection(section));
+    }
 }

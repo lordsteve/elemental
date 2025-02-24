@@ -1,4 +1,4 @@
-import el, { html } from '@services/elements';
+import el from '@services/elements';
 import views from '@views';
 import Routes from '@routes';
 

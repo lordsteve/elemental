@@ -107,6 +107,11 @@ export default class El {
     } set imgs(imgs: NodeListOf<HTMLImageElement>) {
         this.imgs = imgs;
     }
+    public static get sections() {
+        return this.getElements<HTMLElement>('section');
+    } set sections(sections: NodeListOf<HTMLElement>) {
+        this.sections = sections;
+    }
     public static get formInputs() {
         return this.getElements<HTMLInputElement | HTMLTextAreaElement>('form input, form textarea');
     } set formInputs(formInputs: NodeListOf<HTMLInputElement | HTMLTextAreaElement>) {
