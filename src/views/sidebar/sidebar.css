@@ -1,15 +1,20 @@
 el-sidebar {
     background-color: #333;
     color: #fff;
+    overflow: auto;
 }
 
 el-sidebar ul {
     list-style-type: none;
     padding: 0;
+    text-align: center;
+    overflow: auto;
+    width: max-content;
 }
 
 el-sidebar li {
     padding: 10px 0;
+    display: inline-block;
 }
 
 el-sidebar a {
@@ -27,5 +32,14 @@ el-sidebar a:hover {
 @media screen and (min-width: 768px) {
     el-sidebar {
         min-width: 200px;
+        overflow: auto;
+    }
+
+    el-sidebar ul {
+        text-align: left;
+    }
+
+    el-sidebar li {
+        display: block;
     }
 }

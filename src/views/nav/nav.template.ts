@@ -1,9 +1,6 @@
 import { html } from "@services/elements";
 import githubButtonTemplate from "@views/github-button/githubButton.template";
 
-console.log(githubButtonTemplate('https://github.com/lordsteve/elemental', true));
-
-
 const navTemplate = () => html`
     <nav>${githubButtonTemplate('https://github.com/lordsteve/elemental', true)}
         <ul>
