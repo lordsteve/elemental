@@ -1,6 +1,6 @@
 import el from "@services/elements";
-import sidebarTemplate from "@views/sidebar/sidebar.template";
 import Helpers from "@services/helpers";
+import sidebarTemplate from "@views/sidebar/sidebar.template";
 
 export default function docs() {
     el.title.textContent = "Elemental Documentation";
