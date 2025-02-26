@@ -62,7 +62,7 @@ h1 {
 }
 .content-slate {
     flex-grow: 1;
-    height: calc(100vh - 3.2rem);
+    height: calc(100vh - 3.2rem - 69.9px);
     overflow: auto;
 }
 .content-slate section {
@@ -81,6 +81,7 @@ h1 {
 @media screen and (min-width: 768px) {
     .content-slate {
         margin:  0;
+        height: calc(100vh - 3.2rem);
     }
     .content-slate section {
         padding: 1rem 4rem;

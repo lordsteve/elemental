@@ -4,12 +4,20 @@ el-sidebar {
     overflow: auto;
 }
 
+/* scrollbar styling */
+el-sidebar::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+    display:none;
+}
+
 el-sidebar ul {
     list-style-type: none;
     padding: 0;
     text-align: center;
     overflow: auto;
     width: max-content;
+    margin: 0;
 }
 
 el-sidebar li {
@@ -33,6 +41,7 @@ el-sidebar a:hover {
     el-sidebar {
         min-width: 200px;
         overflow: auto;
+        text-align: left;
     }
 
     el-sidebar ul {
