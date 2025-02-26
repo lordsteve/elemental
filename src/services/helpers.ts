@@ -10,7 +10,7 @@ export default class Helpers {
         if (distance < 0 && screenWidth > 768) {
             section.style.marginTop = `${(parentRect.height / 2) - (rect.height / 2)}px`
         } else {
-            section.style.marginTop = '0';
+            section.style.marginTop = '1rem';
         }
     }
 }
