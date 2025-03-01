@@ -47,9 +47,9 @@ export default helloWorldTemplate;
                 <pre>
                     <code>
 public static get helloWorld() {<br>
-&nbsp;&nbsp;return this.getElement<HTMLElement>('el-hello-world');<br>
+  ;return this.getElement<HTMLElement>('el-hello-world');<br>
 } set helloWorld(helloWorld: HTMLElement) {<br>
-&nbsp;&nbsp;this.helloWorld = helloWorld;<br>
+  this.helloWorld = helloWorld;<br>
 }
                     </code>
                 </pre>
@@ -81,8 +81,8 @@ export default helloWorldTemplate;
 import { html } from '@services/elements';<br>
 <br>
 const helloWorldTemplate = (name: string) => {<br>
-&nbsp;&nbsp;name = name.toUpperCase();<br>
-&nbsp;&nbsp;return html${escapeHtml`\``}<br>
+  name = name.toUpperCase();<br>
+  return html${escapeHtml`\``}<br>
 ${escapeHtml`    <el-hello-world>`}<br>
 ${escapeHtml`      <section>`}<br>
 ${escapeHtml`        <h1>Hello $\{name}!</h1>`}<br>
@@ -127,8 +127,8 @@ export default homeTemplate;
 import el from '@services/elements';<br>
 <br>
 export function helloWorld() {<br>
-&nbsp;&nbsp;el.title.innerText = 'Hello World!';<br>
-&nbsp;&nbsp;console.log(helloWorld);<br>
+  el.title.innerText = 'Hello World!';<br>
+  console.log(helloWorld);<br>
 }
                     </code>
                 </pre>
@@ -161,11 +161,11 @@ export default helloWorldTemplate;
 import el from '@services/elements';<br>
 <br>
 export function helloWorld() {<br>
-&nbsp;&nbsp;el.title.innerText = 'Hello World!';<br>
-&nbsp;&nbsp;const button = el.buttons.id('hello-button');<br>
-&nbsp;&nbsp;if (button) button.onclick = () => {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;console.log('Hello!');<br>
-&nbsp;&nbsp;};<br>
+  el.title.innerText = 'Hello World!';<br>
+  const button = el.buttons.id('hello-button');<br>
+  if (button) button.onclick = () => {<br>
+    console.log('Hello!');<br>
+  };<br>
 }
                     </code>
                 </pre>
@@ -193,14 +193,14 @@ export function helloWorld() {<br>
                 <pre>
                     <code class="language-css">
 el-hello-world .example-class {<br>
-&nbsp;&nbsp;display: flex;<br>
-&nbsp;&nbsp;justify-content: center;<br>
-&nbsp;&nbsp;align-items: center;<br>
+  display: flex;<br>
+  justify-content: center;<br>
+  align-items: center;<br>
 }
                     </code>
                 </pre>
                 <p>
-                    If you want to write global styles that apply to all views, you can write them in the <code css="language-plaintext">main.css</code> file. This is where you would put things like the body styles or the styles for global text or default buttons, etc.
+                    If you want to write global styles that apply to all views, you can write them in the <code class="language-plaintext">main.css</code> file. This is where you would put things like the body styles or the styles for global text or default buttons, etc.
                 </p>
                 <h4>View Index</h4>
                 <p>
@@ -215,8 +215,8 @@ export { default as helloWorldTemplate } from './helloWorld/helloWorld.template'
 export { default as helloWorld } from './helloWorld/helloWorld.ctrl';<br>
 <br>
 const views = {<br>
-&nbsp;&nbsp;helloWorldTemplate,<br>
-&nbsp;&nbsp;helloWorld<br>
+  helloWorldTemplate,<br>
+  helloWorld<br>
 };<br>
 <br>
 export default views;
@@ -224,6 +224,68 @@ export default views;
                 </pre>
                 <p>
                     Sub-views make it into this file when they are attached to their parent view, so it's not necessary to import them here.
+                </p>
+                <h4>Components</h4>
+                <p>
+                    Sometimes you'll want to create a view that is used in multiple views or multiple times in a view. This is where components come in. It gets tricky when making a view that's supposed to show up inside another view, because the way that we make a view spits out HTML, but you can't spit out HTML inside the HTML string and expect that to be spit out of the main view as the same HTML. At the same time, there are times you'll want to allow the component to stand on its own, and a plain string isn't gonna cut it in that case.
+                </p>
+                <p>
+                    The solution that I've come  up with is pass in a boolean that controls whether or not the view is a string. It'll look like this:
+                </p>
+                <pre>
+                    <code class="language-typescript">
+import { html, htmlstring } from '@services/elements';<br>
+<br>
+const helloWorldButtonComponent = (string: boolean = false) => {<br>
+  const button = htmlstring${escapeHtml`\``}<br>
+${escapeHtml`    <button>`}<br>
+${escapeHtml`      Say Hello!`}<br>
+${escapeHtml`    </button>`}<br>
+${escapeHtml`  \``};<br>
+${escapeHtml`  return string ? button : html\`\${button}\`;`}<br>
+};<br>
+export default helloWorldButtonComponent;
+                    </code>
+                </pre>
+                <p>
+                    The <code class="language-typescript">htmlstring</code> function spits out a regular old string. This can be used to insert the component into the template of another view. The <code class="language-typescript">html</code> function, as you already know, will spit out an actual HTML element so that the view can stand on its own if it needs to. (In the case of a button, that probably won't be the case. But, you get the idea.) Writing the view like this allow us to not have to write the same HTML twice. You can write it first as a string and then use that same string to build an element only if you need to.
+                </p>
+                <p>
+                    Then you can place the component in another view like this:
+                </p>
+                <pre>
+                    <code class="language-typescript">
+import views from '@views';<br>
+import { html } from '@services/elements';<br>
+<br>
+const helloWorldTemplate = () => html${escapeHtml`\``}<br>
+${escapeHtml`  <el-hello-world>`}<br>
+${escapeHtml`    <section>`}<br>
+${escapeHtml`      <h1>Hello World!</h1>`}<br>
+${escapeHtml`      $\{views.helloWorldButtonComponent(true)}`}<br>
+${escapeHtml`    </section>`}<br>
+${escapeHtml`  </el-hello-world>`}<br>
+${escapeHtml`\``};<br>
+export default helloWorldTemplate;
+                    </code>
+                </pre>
+                <p>
+                    If you create a controller for the component, you can add that controller to the main view controller like this:
+                </p>
+                <pre>
+                    <code class="language-typescript">
+import el from '@services/elements';<br>
+import views from '@views';<br>
+<br>
+export function helloWorld() {<br>
+    el.title.innerText = 'Hello World!';<br>
+    console.log(helloWorld);<br>
+    views.helloWorldButtonComponent();<br>
+}
+                    </code>
+                </pre>
+                <p>
+                    You can make a separate folder for components if you like, but that's up to you. It kind of depends on how many you're going to use. Just remember to add them to the view index file so your other views can access them.
                 </p>
                 <p>
                     That's basically how views work in Elemental. Next up, you need to know how the <a href="/docs/routes">Route</a> files work. And, yes, that's plural! You'll see why...
