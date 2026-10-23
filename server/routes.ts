@@ -1,4 +1,5 @@
 import BaseController from 'controllers/baseController';
+import ContactController from 'controllers/contactController';
 import http from 'http';
 
 export default class Routes {
@@ -15,6 +16,12 @@ export default class Routes {
     @Method('GET')
     private ['/get-data'](req: http.IncomingMessage, res: http.ServerResponse): ResponsePromise {
         return BaseController.getData(req, res);
+    }
+
+    // Emails the contact form to CONTACT_EMAIL
+    @Method('POST')
+    private ['/send-contact'](req: http.IncomingMessage, res: http.ServerResponse): ResponsePromise {
+        return ContactController.sendContact(req, res);
     }
 
     get response(): ResponsePromise {

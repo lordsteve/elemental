@@ -9,7 +9,8 @@ const homeTemplate = (
     const sidebar = sidebarTemplate({
         '/':'Home',
         '/about':'About',
-        '/docs':'Docs'
+        '/docs':'Docs',
+        '/contact':'Contact'
     }).outerHTML;
 
     return Helpers.html`

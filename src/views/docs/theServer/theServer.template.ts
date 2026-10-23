@@ -124,6 +124,29 @@ public static async saveLink(req: http.IncomingMessage, res: http.ServerResponse
                     Sometimes it's handy to keep a chunk of HTML on the server, like the form for a modal. Any ${inline('.html')} file under ${inline('server/')} gets copied next to the compiled server code when you build (that's the ${inline('server-html')} script), so a controller can read it and send it back with ${inline("header: 'text/html'")}. On the front end, ${inline('buildModalFromUrl()')} in ${inline('src/views/modal/modal.ctrl.ts')} fetches it from a ${inline('/data/')} route, puts it on the page, and closes it when someone clicks outside it or on its ${inline('.close-button')}.
                 </p>
 
+                <h4>Sending Email</h4>
+                <p>
+                    ${inline('server/services/email.ts')} has an ${inline('EmailService')} for sending email from your server. It sends through the account in ${inline('EMAIL_USER')} and ${inline('EMAIL_PASS')}, which is Gmail unless ${inline('EMAIL_SERVICE')} says otherwise. (For Gmail, ${inline('EMAIL_PASS')} has to be an app password, not your regular one.) Messages come from ${inline('EMAIL_FROM')}, or from ${inline('EMAIL_USER')} if you leave that out.
+                </p>
+                ${codeBlock(`
+import EmailService from 'services/email';
+
+const sent = await EmailService.sendEmail(
+    'you@example.com',          // to
+    'Somebody signed up!',      // subject
+    'Plain text version',       // text
+    '<p>HTML version</p>',      // html (optional)
+    'them@example.com'          // reply-to (optional)
+);
+if (!sent) console.error("That one didn't go out");
+                `)}
+                <p>
+                    Email is optional, like the database. Until ${inline('EMAIL_USER')} and ${inline('EMAIL_PASS')} are set, ${inline('EmailService.isConfigured')} is ${inline('false')} and nothing gets sent. And if you put anything a user typed into the HTML version, escape it first, or they can put their own HTML in your inbox.
+                </p>
+                <p>
+                    Elemental uses it for the contact page at ${inline('/contact')}. Its form posts to ${inline('/data/send-contact')}, and ${inline('ContactController')} emails the message to ${inline('CONTACT_EMAIL')} with the reply-to set to the sender, so you can just hit Reply. Contact forms attract spam, so it comes with some defenses: it checks the name, email, and message before sending anything, escapes them in the email, lets each visitor send three messages every ten minutes, and has a hidden field that people never see but bots fill in. When that field has something in it, the bot is told its message went through, and nothing is sent. Until email and ${inline('CONTACT_EMAIL')} are set up, the form says it isn't set up yet.
+                </p>
+
                 <h4>The Cache</h4>
                 <p>
                     ${inline('server/cache.ts')} is a single NodeCache that the whole server shares. It's where the CSRF tokens live while the server is running, and you can use it too: ${inline("cache.set('key', value, seconds)")} and ${inline("cache.get('key')")}. Just remember it's only memory, so it's empty again after a restart. Anything that has to survive one belongs in the database.

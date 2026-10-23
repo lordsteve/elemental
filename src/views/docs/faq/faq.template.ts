@@ -14,6 +14,11 @@ const faqTemplate = () => html`
                     Nope. Leave ${inline('DB_HOST')} out of your ${inline('.env')} file and the server runs without one. These docs run without one.
                 </p>
 
+                <h4>Why does the contact form say it isn't set up yet?</h4>
+                <p>
+                    It needs an email account to send from and somewhere to send to: ${inline('EMAIL_USER')}, ${inline('EMAIL_PASS')}, and ${inline('CONTACT_EMAIL')}. See Sending Email on <a href="/docs/the-server">The Server</a>.
+                </p>
+
                 <h4>Why does my POST (or PUT, or DELETE) get a 403 Forbidden?</h4>
                 <p>
                     It didn't have a CSRF token. The <a href="/docs/request-service">Request service</a> adds one to every request that goes through ${inline('fetch')}, but only after ${inline('initLoader()')} has run, so make sure it's still the first thing in ${inline('main.ts')}. If you're sending requests from somewhere else, like a script or another server, it needs to send the ${inline('csrf-token')} cookie and the same value in an ${inline('X-CSRF-TOKEN')} header.

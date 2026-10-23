@@ -32,6 +32,7 @@ With `ENV=development` in `.env`, the server starts browser-sync and opens a tab
 - **The Elements service** (`el`): getters for the elements on the page, a loading spinner, and listeners that clean up after themselves
 - **The Request service**: `fetch` with CSRF tokens and the loader already handled
 - **A Node server** with CSRF protection and no framework underneath
+- **A contact page** whose form emails you, once the `EMAIL_` settings and `CONTACT_EMAIL` are in `.env`
 - **A database, if you want one**: [TypeORM](https://typeorm.io/) with migrations, set up for MySQL. Without `DB_HOST`, the server runs without one.
 - **Light and dark mode**, following the device's setting, with a toggle in the nav
 
