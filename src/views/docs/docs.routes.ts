@@ -52,4 +52,11 @@ export default class DocsRoutes extends Routes {
         );
         views.docs();
     }
+
+    ['changelog']() {
+        el.body.appendChild(
+            views.docsTemplate.changelogTemplate()
+        );
+        views.docs();
+    }
 }

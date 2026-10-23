@@ -63,4 +63,4 @@ src/
 | `npm run migration:run` | apply migrations |
 | `npm run migration:revert` | undo the last migration |
 
-Everything else is in the [docs](https://elemental.thegreenasterisk.com/docs), which are also the views in `src/views/docs`, so you can see how a site is put together by reading them. Delete them when you start your own.
+What's changed lately is in the [changelog](https://elemental.thegreenasterisk.com/docs/changelog). Everything else is in the [docs](https://elemental.thegreenasterisk.com/docs), which are also the views in `src/views/docs`, so you can see how a site is put together by reading them. Delete them when you start your own.

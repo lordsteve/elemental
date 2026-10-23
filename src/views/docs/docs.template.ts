@@ -6,6 +6,7 @@ import routesTemplate from './routes/routes.template';
 import theServer from './theServer/theServer.template';
 import viewsTemplate from './views/views.template';
 import faqTemplate from './faq/faq.template';
+import changelogTemplate from './changelog/changelog.template';
 
 const docsTemplate = () => Helpers.html`
         <el-docs>
@@ -26,6 +27,7 @@ const docsTemplate = () => Helpers.html`
                         <li><a href="/docs/request-service">Request Service</a></li>
                         <li><a href="/docs/the-server">The Server</a></li>
                         <li><a href="/docs/faq">FAQ</a></li>
+                        <li><a href="/docs/changelog">Changelog</a></li>
                     </ul>
                 </section>
             </div>
@@ -38,4 +40,5 @@ docsTemplate.routesTemplate = routesTemplate;
 docsTemplate.requestServiceTemplate = requestServiceTemplate;
 docsTemplate.theServer = theServer;
 docsTemplate.faqTemplate = faqTemplate;
+docsTemplate.changelogTemplate = changelogTemplate;
 export default docsTemplate;
