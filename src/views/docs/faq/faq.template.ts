@@ -45,17 +45,9 @@ const faqTemplate = () => html`
                 </p>
 
                 <h4>I made my app with an older Elemental. What changed?</h4>
-                <ul>
-                    <li>${inline('html')} and ${inline('escapeHtml')} moved from the Elements service to the Helpers service: ${inline('Helpers.html')}. ${inline('htmlstring')} is gone, because a template literal without a tag already is a string.</li>
-                    <li>${inline('el')} is imported from ${inline("'@elements'")}, and it's split into ${inline('BaseEl')} (Elemental's) and ${inline('el')} (yours). Your own getters go in ${inline('src/services/elements.ts')}, and they don't need setters anymore.</li>
-                    <li>Getters for single elements return ${inline('null')} instead of throwing when the element isn't there, ${inline('id()')} returns ${inline('undefined')} instead of throwing, and lists come back empty instead of ${inline('null')}.</li>
-                    <li>The CSRF token now comes from a cookie and lasts a day, instead of being fetched before every request.</li>
-                    <li>The Request service has ${inline('getData()')}, ${inline('postData()')}, ${inline('putData()')}, and ${inline('delData()')}, and failed requests now reject with the server's error.</li>
-                    <li>Server routes can send ${inline('headerName')} for headers other than ${inline('Content-Type')}.</li>
-                    <li>${inline('synchronize')} is off, so database changes go through migrations, and the MySQL driver is ${inline('mysql2')}.</li>
-                    <li>${inline('env-cmd')} is gone. With ${inline('ENV=development')}, the server starts browser-sync and nodemon itself.</li>
-                    <li>${inline('?flag=false')} in a URL now comes through as ${inline('false')}. It used to come through as ${inline('true')}.</li>
-                </ul>
+                <p>
+                    Have a look at the <a href="/docs/changelog">Changelog</a>. The "Works differently" lists cover anything you might need to change in your own code.
+                </p>
             </section>
         </div>
     </el-docs>
