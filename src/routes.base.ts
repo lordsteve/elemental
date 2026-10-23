@@ -1,6 +1,5 @@
 import el from "@elements";
-import { User } from "@entities";
-import request, { getHtml } from "@services/request";
+import { getHtml } from "@services/request";
 import views from "@views";
 
 export default class RoutesBase {
@@ -23,53 +22,6 @@ export default class RoutesBase {
             "A boilerplate framework for TypeScript web development."
         ));
         views.home();
-    }
-
-    /**
-     * Where the server sends the browser after a Discord login. It trades the
-     * one-time ticket for a session key, keeps the key and the user in
-     * localStorage, and goes back to the page the login started from.
-     */
-    ['start']() {
-        const url = (this.query.url as string) || '/';
-        const ticket = this.query.ticket;
-        if (!ticket) {
-            console.error('No login ticket provided');
-            window.location.href = url;
-            return;
-        }
-        request('GET', '/data/start', { ticket }, false)
-            .then((response) => {
-                if (response.ok) {
-                    const sessionKey = response.headers.get('Authorization');
-                    if (!sessionKey) throw new Error('No session key returned');
-                    localStorage.setItem('sessionKey', sessionKey);
-                    el.sessionKey = sessionKey;
-                    return response.json();
-                } else {
-                    throw new Error(response.statusText);
-                }
-            })
-            .then((user: User | undefined) => {
-                if (!user) throw new Error('No user returned');
-                delete user.email;
-                delete user.discord_id;
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                el.currentUser = user;
-                window.location.href = url;
-            })
-            .catch((error) => {
-                console.error(error.message ?? error);
-                window.location.href = url;
-            });
-    }
-
-    ['logout']() {
-        localStorage.removeItem('sessionKey');
-        localStorage.removeItem('currentUser');
-        request('GET', '/data/logout').then(() => {
-            window.history.back();
-        });
     }
 
     view() {

@@ -1,6 +1,5 @@
 import StorageBox from "@services/storageBox";
 import { lightbox, lightboxTemplate } from "@views";
-import { User } from "@entities";
 import Helpers from "./helpers";
 
 type FormValues = { [key: string]: string };
@@ -64,60 +63,6 @@ export default class BaseEl {
                 return els.values().find(el => el.id === id);
             }
             return els;
-        }
-    }
-
-    public static get isAuth(): boolean {
-        return this.sessionKey && this.sessionKey !== ''
-            ? Number(this.sessionKey.substring(this.sessionKey.indexOf('%') + 1)) === this.currentUser?.id
-            : false;
-    };
-
-    /**
-     * Checks if the current user is authenticated.
-     * @param input Optional parameter or function to execute if the user is authenticated.
-     * @param silent Set to true to suppress the boolean return.
-     * @returns The result of the function or the passed through parameter if provided and the user is authenticated, otherwise true if no function is provided, or false if the user is not authenticated. A function receives the current user as an argument.
-     */
-    public static checkAuth<T>(input?: T | ((user: User) => T), silent = false) {
-        if (this.isAuth) {
-            return typeof input === 'function' ? (input as (user: User) => T)(this.currentUser!) : input ?? true;
-        } else {
-            return silent ? void 0 : false;
-        }
-    }
-
-    /**
-     * Checks if the current user is an admin.
-     * @param input Optional parameter or function to execute if the user is an admin.
-     * @param silent Set to true to suppress the boolean return.
-     * @returns The result of the function or the passed through parameter if provided and the user is an admin, otherwise true if no function is provided, or false if the user is not an admin. A function receives the current user as an argument.
-     */
-    public static checkAdmin<T>(input?: T | ((user: User) => T), silent = false) {
-        if (this.currentUser?.isAdmin) {
-            return typeof input === 'function' ? (input as (user: User) => T)(this.currentUser) : input ?? true;
-        } else {
-            return silent ? void 0 : false;
-        }
-    }
-
-    public static currentUser: User | undefined = undefined;
-
-    public static sessionKey: string = '';
-
-    public static establishAuth() {
-        this.currentUser = localStorage.getItem('currentUser')
-            ? JSON.parse(localStorage.getItem('currentUser')!)
-            : undefined;
-        this.sessionKey = localStorage.getItem('sessionKey') ?? '';
-    }
-
-    public static logout() {
-        if (this.currentUser) {
-            localStorage.removeItem('currentUser');
-            localStorage.removeItem('sessionKey');
-            delete this.currentUser;
-            this.sessionKey = '';
         }
     }
 

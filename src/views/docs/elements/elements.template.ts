@@ -24,7 +24,7 @@ const elementsTemplate = () => html`
 
                 <h4>Two Layers</h4>
                 <p>
-                    The Elements service is split into two files. ${inline('src/services/baseElements.ts')} holds ${inline('BaseEl')}, which is everything that comes with Elemental: the common elements, the loader, the event listener signal, and the login helpers. ${inline('src/services/elements.ts')} holds ${inline('el')}, which extends ${inline('BaseEl')} with the elements that belong to your app. That second file is the one you'll be editing. The first one you can mostly leave alone, which makes it easier to pull in Elemental updates later.
+                    The Elements service is split into two files. ${inline('src/services/baseElements.ts')} holds ${inline('BaseEl')}, which is everything that comes with Elemental: the common elements, the loader, and the event listener signal. ${inline('src/services/elements.ts')} holds ${inline('el')}, which extends ${inline('BaseEl')} with the elements that belong to your app. That second file is the one you'll be editing. The first one you can mostly leave alone, which makes it easier to pull in Elemental updates later.
                 </p>
 
                 <h4>The Elements</h4>
@@ -127,11 +127,6 @@ el.buttons.id('save')?.addEventListener('click', () => {
                 </p>
                 <p>
                     ${inline('BaseEl')} also adds two methods to every string: ${inline('stripScripts()')} removes any ${inline('<script>')} tags, which is handy for anything typed into a form, and ${inline('doubleBreakDivs()')} cleans up the ${inline('<div>')} tags a ${inline('contenteditable')} element likes to add.
-                </p>
-
-                <h4>Logging In</h4>
-                <p>
-                    ${inline('el.currentUser')}, ${inline('el.isAuth')}, ${inline('el.checkAuth()')}, and ${inline('el.checkAdmin()')} tell you who's logged in. They have <a href="/docs/login">their own page</a>.
                 </p>
 
                 <h4>Template Literals</h4>

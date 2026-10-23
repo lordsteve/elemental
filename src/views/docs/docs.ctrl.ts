@@ -15,7 +15,6 @@ export default function docs() {
         "/docs/routes": "Routes",
         "/docs/request-service": "Request Service",
         "/docs/the-server": "The Server",
-        "/docs/login": "Logging In",
         "/docs/faq": "FAQ"
     }), docs.firstChild);
 

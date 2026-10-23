@@ -19,22 +19,11 @@ const routesTemplate = () => html`
                 ${codeBlock(`
 import el from '@elements';
 import CookieJar from '@services/cookieJar';
-import { getData, initLoader } from '@services/request';
+import { initLoader } from '@services/request';
 import views from '@views';
 import Routes from './routes';
 
 initLoader();
-el.establishAuth();
-if (el.sessionKey) {
-    // Sessions last three months on the server; drop one it no longer knows
-    getData<boolean>('/check-auth').then(isAuth => {
-        if (!isAuth) {
-            localStorage.removeItem('sessionKey');
-            localStorage.removeItem('currentUser');
-            location.reload();
-        }
-    }).catch(() => { });
-}
 
 const path = location.pathname.split('/');
 path.shift();
@@ -49,7 +38,7 @@ new Routes(path).view();
 new el();
                 `)}
                 <p>
-                    Taking it from the top: ${inline('initLoader()')} sets up the <a href="/docs/request-service">Request service</a>, and ${inline('el.establishAuth()')} and the ${inline('check-auth')} call pick up whoever is <a href="/docs/login">logged in</a>. The nav and the cookie banner are optional. They're just there to put a navigation bar and a cookie notice on every page you load, so you can remove them if you don't want them. ${inline('new el()')} at the end sets up the form helpers from the <a href="/docs/elements">Elements</a> page.
+                    Taking it from the top: ${inline('initLoader()')} sets up the <a href="/docs/request-service">Request service</a>. The nav and the cookie banner are optional. They're just there to put a navigation bar and a cookie notice on every page you load, so you can remove them if you don't want them. ${inline('new el()')} at the end sets up the form helpers from the <a href="/docs/elements">Elements</a> page.
                 </p>
                 <p>
                     ${inline('path.shift();')} is there to remove the first element of the array, which is always an empty string, because the URL always starts with a ${inline('/')}. So, what happens when you pass the path into the Routes class?
@@ -136,9 +125,6 @@ export default class RoutesBase {
                 </p>
                 <p>
                     If the URL is just ${inline('/')}, then the first string in the array will be blank (even after shifting it in ${inline('main.ts')}). So, the ${inline("['']()")} function is called, which serves the home page. See what I did there? The Routes class is an object with functions that are indexed by the strings of the paths in the array. So, when ${inline('view()')} sees that the string is blank, it calls ${inline("['']()")} which, in turn, calls up ${inline('el.body')} and appends the home page to it. Which, in this case, takes two arguments: a title and a subtitle. Then, it calls ${inline('views.home()')} which is the controller for the home page.
-                </p>
-                <p>
-                    RoutesBase also has two routes of its own, ${inline("['start']()")} and ${inline("['logout']()")}. Those are part of logging in, and they're covered on the <a href="/docs/login">Logging In</a> page. Just don't name any of your own pages "start" or "logout."
                 </p>
                 <p>
                     So, that means if you want to add a new page, all you have to do is add a new function indexed by the string of the path you want to serve. For example, if you want to add a page at ${inline('/about')}, you would add a function like this:

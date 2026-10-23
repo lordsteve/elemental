@@ -7,7 +7,6 @@ import http from 'http';
 import path from 'path';
 
 import cache from './cache';
-import SessionController from './controllers/sessionController';
 import Routes from './routes';
 import BrowserSync from './services/browserSyncService';
 import { initDatabase, isDatabaseConfigured } from './services/database';
@@ -183,13 +182,8 @@ const startServer = async () => {
                 console.error('Failed to initialize database before starting server:', error);
                 process.exit(1);
             }
-            try {
-                await SessionController.loadSessions();
-            } catch (error) {
-                console.error('Failed to load sessions, starting with none:', error);
-            }
         } else {
-            console.log('No DB_HOST set: running without a database, so logging in is off.');
+            console.log('No DB_HOST set: running without a database.');
         }
 
         const server = http.createServer(makeServer);

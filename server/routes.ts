@@ -1,5 +1,4 @@
 import BaseController from 'controllers/baseController';
-import SessionController from 'controllers/sessionController';
 import http from 'http';
 
 export default class Routes {
@@ -16,42 +15,6 @@ export default class Routes {
     @Method('GET')
     private ['/get-data'](req: http.IncomingMessage, res: http.ServerResponse): ResponsePromise {
         return BaseController.getData(req, res);
-    }
-
-    // Discord login and sessions
-    @Method('GET')
-    private ['/get-discord-creds'](req: http.IncomingMessage, res: http.ServerResponse): ResponsePromise {
-        return SessionController.getDiscordCreds(req, res);
-    }
-
-    @Method('GET')
-    private ['/auth-redirect'](req: http.IncomingMessage, res: http.ServerResponse): ResponsePromise {
-        return SessionController.loginDiscord(req, res);
-    }
-
-    @Method('GET')
-    private ['/check-auth'](req: http.IncomingMessage, res: http.ServerResponse): ResponsePromise {
-        const isAuth = SessionController.checkAuth(req);
-        return Promise.resolve({
-            response: isAuth.toString(),
-            header: 'application/json',
-            status: 200
-        });
-    }
-
-    @Method('GET')
-    private ['/start'](req: http.IncomingMessage, res: http.ServerResponse): ResponsePromise {
-        return SessionController.startNewSession(req, res);
-    }
-
-    @Method('GET')
-    private ['/logout'](req: http.IncomingMessage, res: http.ServerResponse): ResponsePromise {
-        SessionController.logout(req);
-        return Promise.resolve({
-            response: JSON.stringify('Logged out'),
-            header: 'text/plain',
-            status: 200
-        });
     }
 
     get response(): ResponsePromise {
