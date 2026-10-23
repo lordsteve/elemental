@@ -2,8 +2,8 @@ a.github-button {
   position:absolute;
   bottom: 1em;
   right: 1.5em;
-  background-color: #24292e;
-  color: #fff;
+  background-color: var(--github-bg);
+  color: var(--text-on-accent);
   border-radius: 3px;
   padding: 0.5em 1em;
   text-decoration: none;

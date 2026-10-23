@@ -1,4 +1,7 @@
-import { html } from "@services/elements";
+import Helpers from "@services/helpers";
+import codeBlock, { inline } from "../codeBlock";
+
+const html = Helpers.html;
 
 const gettingStartedTemplate = () => html`
     <el-docs>
@@ -6,58 +9,85 @@ const gettingStartedTemplate = () => html`
             <section>
                 <h1>Getting Started</h1>
                 <h4>TL;DR</h4>
-                <pre>
-                    <code class="language-plaintext">
-git clone https://github.com/lordsteve/elemental.git<br>
-git init {new-project-name}<br>
-cp -r elemental/* {new-project-name}/<br>
-cd {new-project-name}<br>
-npm install<br>
+                ${codeBlock(`
+git clone https://github.com/lordsteve/elemental.git {new-project-name}
+cd {new-project-name}
+rm -rf .git && git init
+cp .env-example .env
+npm install
 npm run dev
-                    </code>
-                </pre>
+                `, 'plaintext')}
 
                 <h4>Prerequisites</h4>
                 <p>
-                    You're going to need git and Node.js installed on your machine to start. You can download git from <a href="https://git-scm.com/downloads" target="_blank">git-scm.com</a> and Node.js from <a href="https://nodejs.org/en/download/" target="_blank">nodejs.org</a>.
+                    You're going to need git and Node.js installed on your machine to start. You can download git from <a href="https://git-scm.com/downloads" target="_blank">git-scm.com</a> and Node.js from <a href="https://nodejs.org/en/download/" target="_blank">nodejs.org</a>. Go with a current LTS version of Node (22 or newer).
+                </p>
+                <p>
+                    That's all you need to get a site running. Two other things are optional, and you can add them whenever you're ready: a MySQL database, if your app needs to store anything, and a Discord application, if you want people to be able to log in. Elemental runs just fine without either one.
                 </p>
 
                 <h4>Installation</h4>
                 <p>
-                    Once you have those, you can clone the Elemental repository onto your computer and then copy the files into a new project folder. So, open git bash and run the following commands:
+                    Clone the Elemental repository straight into a folder named after your new project, then throw away its git history so you can start your own:
                 </p>
-                <pre>
-                    <code class="language-plaintext">
-git clone https://github.com/lordsteve/elemental.git<br>
-git init {new-project-name}<br>
-cp -r elemental/* {new-project-name}/
-                    </code>
-                </pre>
+                ${codeBlock(`
+git clone https://github.com/lordsteve/elemental.git {new-project-name}
+cd {new-project-name}
+rm -rf .git && git init
+                `, 'plaintext')}
                 <p>
-                    This will ensure you have all the necessary files to start a new project with Elemental. You can go ahead and delete the docs folder at <code class="language-plaintext">src/views/docs</code> to start fresh. This will require you to also delete any docs references in the <code class="language-plaintext">src/views/main.ts</code> file and <code class="language-plaintext">src/routes.ts</code>.
+                    Next, install the dependencies:
+                </p>
+                ${codeBlock(`npm install`, 'plaintext')}
+                <p>
+                    This will install a few different packages that you need to create and run an Elemental project. They include, but are not limited to, TypeScript, esbuild, TypeORM, browser-sync, and nodemon.
+                </p>
+
+                <h4>Environment Variables</h4>
+                <p>
+                    Elemental reads its settings from environment variables, and in development those come from a ${inline('.env')} file. There's an example ready to copy:
+                </p>
+                ${codeBlock(`cp .env-example .env`, 'plaintext')}
+                <p>
+                    The first four are the ones that matter right away:
+                </p>
+                ${codeBlock(`
+ENV=development
+PORT=3000
+HOST=localhost
+RELOAD_PORT=8080
+                `, 'plaintext')}
+                <p>
+                    ${inline('ENV=development')} turns on live reloading. Leave it out in production. The ${inline('DB_')} variables are for the database and the ${inline('DISCORD_')} ones are for logging in. You can leave those alone until you need them. Without ${inline('DB_HOST')}, the server simply runs without a database, and logging in is switched off. There's more on both in <a href="/docs/the-server">The Server</a> and <a href="/docs/login">Logging In</a>.
                 </p>
                 <p>
-                    Next, navigate to the new project folder and install the dependencies.
-                </p>
-                <pre>
-                    <code class="language-plaintext">
-cd {new-project-name}<br>
-npm install
-                    </code>
-                </pre>
-                <p>
-                    This will install a few different packages that you need to create and run an Elemental project. They include, but are not limited to, TypeScript, TypeORM, reflect-metadata, and a few others.
+                    Never commit your ${inline('.env')} file. It's already in ${inline('.gitignore')}, so you'd have to work at it.
                 </p>
 
                 <h4>Running the Project</h4>
                 <p>
                     Once the dependencies are installed, you can run the project in development mode.
                 </p>
-                <code class="language-plaintext">
-                    npm run dev
-                </code>
+                ${codeBlock(`npm run dev`, 'plaintext')}
                 <p>
-                    This will start a local server on port 3000 and automatically open a browser window to the project. The server and the browser will automatically reload when you make changes to the project files. If you don't want to have the browser refresh automatically, you can access the project on port 8080.
+                    This compiles the server, starts watching your files, and starts the server. Because ${inline('ENV')} is set to ${inline('development')}, the server also starts browser-sync, which opens a browser tab for you. Use the address on ${inline('RELOAD_PORT')} (${inline('http://localhost:8080')} with the example settings). That one reloads the page whenever you change a file, and nodemon restarts the server whenever you change server code. If you'd rather the page didn't refresh on its own, the plain server is on ${inline('PORT')} (${inline('http://localhost:3000')}).
+                </p>
+                <p>
+                    For production, ${inline('npm run build')} compiles everything into ${inline('server/comp')} and ${inline('www')}, and ${inline('npm start')} runs it. ${inline('npm run prod')} does both. Hosts like Heroku run the build script on their own when you deploy, and then run ${inline('npm start')}.
+                </p>
+
+                <h4>Clearing Out the Docs</h4>
+                <p>
+                    These docs are part of the project you just cloned, so you'll probably want to remove them before you build your own thing. Delete the ${inline('src/views/docs')} folder, then remove what pointed to it:
+                </p>
+                <ul>
+                    <li>${inline('docs')}, ${inline('docsTemplate')}, and ${inline('DocsRoutes')} in ${inline('src/views/index.ts')}</li>
+                    <li>the ${inline("['docs']")} route in ${inline('src/routes.ts')}</li>
+                    <li>the ${inline('docs')} getter in ${inline('src/services/elements.ts')}</li>
+                    <li>the Docs links in the nav, home, and about templates</li>
+                </ul>
+                <p>
+                    TypeScript will tell you if you missed anything the next time it compiles.
                 </p>
 
                 <h4>Coding</h4>

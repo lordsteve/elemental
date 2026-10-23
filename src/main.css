@@ -14,12 +14,56 @@
     --inner-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.1);
     --ui-color: #29701b;
     --stroke: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
+    --ui-font: 'Nunito', Geneva, Tahoma, sans-serif;
+    --radius: 5px;
+    --radius-lg: 10px;
+    /* Stacking order, lowest to highest */
+    --z-raised: 100;
+    --z-overlay: 1000;
+    --z-nav-controls: 2000;
+    --z-loader: 9999;
+
+    /* Colors. --ui-color is the green for backgrounds and borders; --ui-text
+       is the green for text, lightened in dark mode to stay readable. */
+    color-scheme: light;
+    --ui-text: #29701b;
+    --page-bg: rgb(200, 200, 200);
+    --surface: white;
+    --text: black;
+    --text-muted: gray;
+    --text-on-accent: white;
+    --border: rgba(0, 0, 0, 0.279);
+    --border-strong: black;
+    --hover-tint: #2222225e;
+    --sidebar-bg: #333;
+    --sidebar-hover: #0000005e;
+    --github-bg: #24292e;
+    --backdrop: rgba(0, 0, 0, 0.25);
+    --scrim: rgba(0, 0, 0, 0.8);
+    --lightbox-shadow: rgba(0, 0, 0, 0.5);
+    --spinner-track: rgba(255, 255, 255, 0.3);
+    --cookie-accept: #4CAF50;
+}
+
+/* Set on <html> before first paint by the script in index.html */
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    --ui-text: #6cc35a;
+    --page-bg: #121212;
+    --surface: #1e1e1e;
+    --text: #d0d0d0;
+    --text-muted: #a0a0a0;
+    --border: rgba(255, 255, 255, 0.2);
+    --border-strong: #888888;
+    --sidebar-bg: #1a1a1a;
+    --sidebar-hover: #ffffff1a;
 }
 
 html {
-    font-family: "Nunito", Geneva, Tahoma, sans-serif;
+    font-family: var(--ui-font);
     scroll-behavior: smooth;
-    background-color: rgb(200, 200, 200);
+    background-color: var(--page-bg);
+    color: var(--text);
 }
 body {
     display: flex;
@@ -49,6 +93,7 @@ button {
     border: none;
     outline: none;
     background: none;
+    color: inherit;
 }
 button:hover {
     transform: scale(1.15);
@@ -58,7 +103,7 @@ button:active {
 }
 
 h1 {
-    color: var(--ui-color);
+    color: var(--ui-text);
 }
 .content-slate {
     flex-grow: 1;
@@ -71,9 +116,9 @@ h1 {
     justify-content: center;
     align-items: center;
     padding: 1rem;
-    border-radius: 5px;
+    border-radius: var(--radius);
     box-shadow: var(--md-shadow);
-    background-color: white;
+    background-color: var(--surface);
     max-width: 900px;
 }
 

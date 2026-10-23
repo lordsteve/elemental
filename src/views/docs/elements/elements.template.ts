@@ -1,4 +1,7 @@
-import { escapeHtml, html } from "@services/elements";
+import Helpers from "@services/helpers";
+import codeBlock, { inline } from "../codeBlock";
+
+const html = Helpers.html;
 
 const elementsTemplate = () => html`
     <el-docs>
@@ -6,108 +9,180 @@ const elementsTemplate = () => html`
             <section>
                 <h1>Elements</h1>
                 <p>
-                    The Elements service is the heart and soul of the Elemental framework. It makes it super easy to get whatever DOM element you need to manipulate by using the native JavaScript <code class="language-typescript">document.querySelector()</code> method wrapped in a getter function.
+                    The Elements service is the heart and soul of the Elemental framework. It makes it super easy to get whatever DOM element you need to manipulate by using the native JavaScript ${inline('document.querySelector()')} method wrapped in a getter function.
                 </p>
                 <p>
-                    For example, if you write a <code class="language-html">${escapeHtml`<div>`}</code> element with an id of <code class="language-html">"my-div"</code> in your HTML, you can access that element in your TypeScript file by calling <code class="language-typescript">el.divs.id('my-div')</code>. This will return the <code class="language-html">${escapeHtml`<div>`}</code> element with the id of <code class="language-html">"my-div"</code> that you can then manipulate as you see fit.
+                    For example, if you write a ${inline('<div>')} element with an id of "my-div" in your HTML, you can access that element in your TypeScript file by calling ${inline("el.divs.id('my-div')")}. This will return the ${inline('<div>')} element with the id of "my-div" that you can then manipulate as you see fit.
                 </p>
                 <p>
-                    It's important to import the Elements service at the top of your TypeScript file with <code class="language-typescript">import el from '@services/elements';</code>. The lowercase <code class="language-typescript">el</code> is a convention that is used throughout the Elemental framework, and it's a good idea to stick with it. The Elements service is a singleton, so you can access it from anywhere in your TypeScript file.
+                    Import it at the top of your TypeScript file like this:
                 </p>
-                <h4>Adding to the Existing Element Objects</h4>
+                ${codeBlock(`import el from '@elements';`)}
                 <p>
-                    JavaScript and TypeScript already have established ways of accessing and manipulating DOM elements on the page. Every kind of element has a type associated with it, such as <code class="language-typescript">HTMLDivElement</code> for a <code class="language-html">${escapeHtml`<div>`}</code> element. Usually, you would access a single element by calling <code class="language-typescript">document.getElementById('my-div')</code>, and, behind the scenes, the Elements service does the same thing. Another way to access elements is by using the <code class="language-typescript">document.querySelector()</code> method, which allows you to access elements by class, tag, or any other CSS selector. In the case of any tag selector (like 'div' or 'span', etc.), it would return a NodeList of all the elements on the page that correspond to that selector with a type of <code class="language-typescript">${escapeHtml`NodeListOf`}</code>. The Elements service queries many of the most relevant tags and provides them as objects named after those tags (for example, <code class="language-typescript">el.divs</code> for <code class="language-html">${escapeHtml`<div>`}</code> elements). It also takes the <code class="language-typescript">NodeListOf</code> and adds the <code class="language-typescript">id()</code> method to it, which allows you to access a single element within the NodeListOf that selector by its id.
+                    The lowercase ${inline('el')} is a convention that is used throughout the Elemental framework, and it's a good idea to stick with it. Everything on it is static, so there's nothing to create. Just import it and use it from anywhere.
                 </p>
+
+                <h4>Two Layers</h4>
                 <p>
-                    The Elements service also provides an easy way to add a background to an element. When you write your HTML, you can add a <code class="language-html">bg</code> attribute to any element and provide a URL to an image. For example: <code class="language-html">${escapeHtml`<div bg="path/to/image.jpg">`}</code>. The Elements service will then add a background image to that element with the URL you provided.
+                    The Elements service is split into two files. ${inline('src/services/baseElements.ts')} holds ${inline('BaseEl')}, which is everything that comes with Elemental: the common elements, the loader, the event listener signal, and the login helpers. ${inline('src/services/elements.ts')} holds ${inline('el')}, which extends ${inline('BaseEl')} with the elements that belong to your app. That second file is the one you'll be editing. The first one you can mostly leave alone, which makes it easier to pull in Elemental updates later.
                 </p>
-                <h4>The Loader</h4>
-                <p>
-                    <code class="language-typescript">el.loader</code> is a special element that is used to display a loading spinner on the page. It works in tadem with the Request service to show up whenever a request is being made and disappear when the request is complete. If the loader is not currently on the page, it will show up if you simply reference it, and you can hide it again by calling <code class="language-typescript">el.loader.remove()</code>.
-                </p>
-                <p>
-                    The loader is a <code class="language-html">${escapeHtml`<loader>`}</code> tag in the HTML wrapped around a <code class="language-html">${escapeHtml`<spinner>`}</code> tag. <code class="language-plaintext">main.css</code> has some default styles for the loader, but you can change them to be whatever you want. The basic idea is that the <code class="language-html">${escapeHtml`<loader>`}</code> tag covers the screen and the <code class="language-html">${escapeHtml`<spinner>`}</code> tag is a spinning circle.
-                </p>
+
                 <h4>The Elements</h4>
                 <p>
-                    Other than the <code class="language-typescript">loader</code> element, the Elements service provides access several other commonly used elements. These include:
-                    <ul>
-                        <li><code>el.anchors</code> for <code class="language-html">${escapeHtml`<a>`}</code> elements</li>
-                        <li><code>el.buttons</code> for <code class="language-html">${escapeHtml`<button>`}</code> elements</li>
-                        <li><code>el.divs</code> for <code class="language-html">${escapeHtml`<div>`}</code> elements</li>
-                        <li><code>el.forms</code> for <code class="language-html">${escapeHtml`<form>`}</code> elements</li>
-                        <li><code>el.headings</code> for <code class="language-html">${escapeHtml`<h1>`}</code> through <code class="language-html">${escapeHtml`<h6>`}</code> elements</li>
-                        <li><code>el.images</code> for <code class="language-html">${escapeHtml`<img>`}</code> elements</li>
-                        <li><code>el.inputs</code> for <code class="language-html">${escapeHtml`<input>`}</code> elements</li>
-                        <li><code>el.labels</code> for <code class="language-html">${escapeHtml`<label>`}</code> elements</li>
-                        <li><code>el.lists</code> for <code class="language-html">${escapeHtml`<ol>`}</code> and <code class="language-html">${escapeHtml`<ul>`}</code> elements</li>
-                        <li><code>el.paragraphs</code> for <code class="language-html">${escapeHtml`<p>`}</code> elements</li>
-                        <li><code>el.selects</code> for <code class="language-html">${escapeHtml`<select>`}</code> elements</li>
-                        <li><code>el.spans</code> for <code class="language-html">${escapeHtml`<span>`}</code> elements</li>
-                        <li><code>el.tables</code> for <code class="language-html">${escapeHtml`<table>`}</code> elements</li>
-                        <li><code>el.textareas</code> for <code class="language-html">${escapeHtml`<textarea>`}</code> elements</li>
-                    </ul>
+                    Some elements only ever exist once on a page. ${inline('el.root')}, ${inline('el.body')}, and ${inline('el.title')} are always there, so they come back as the element itself. Others might or might not be on the page, so they come back as the element or ${inline('null')}:
+                </p>
+                <ul>
+                    <li>${inline('el.nav')} for the ${inline('<nav>')} element</li>
+                    <li>${inline('el.modal')} for an ${inline('<el-modal>')} element</li>
+                    <li>${inline('el.submitButton')} for the first ${inline('<button type="submit">')}</li>
+                    <li>${inline('el.cookieBanner')} for the ${inline('<el-cookie-banner>')} element</li>
+                </ul>
+                <p>
+                    Then there are the elements that usually show up more than once. These come back as a ${inline('NodeListOf')}, the browser's own list type:
+                </p>
+                <ul>
+                    <li>${inline('el.buttons')} for ${inline('<button>')} elements</li>
+                    <li>${inline('el.divs')} for ${inline('<div>')} elements</li>
+                    <li>${inline('el.forms')} for ${inline('<form>')} elements</li>
+                    <li>${inline('el.formInputs')} for every ${inline('<input>')} and ${inline('<textarea>')} inside a form</li>
+                    <li>${inline('el.imgs')} for ${inline('<img>')} elements</li>
+                    <li>${inline('el.inputs')} for ${inline('<input>')} elements</li>
+                    <li>${inline('el.paragraphs')} for ${inline('<p>')} elements</li>
+                    <li>${inline('el.sections')} for ${inline('<section>')} elements</li>
+                    <li>${inline('el.selectors')} for ${inline('<select>')} elements</li>
+                    <li>${inline('el.textareas')} for ${inline('<textarea>')} elements</li>
+                </ul>
+                <p>
+                    Each of these lists has an ${inline('id()')} method that finds the one element in the list with that id. If there isn't one, you get ${inline('undefined')}. If there aren't any of that kind of element on the page at all, you get an empty list (and a note in the console), so ${inline("el.buttons.id('save')")} is always safe to call. You just have to check what comes back:
+                </p>
+                ${codeBlock(`
+const saveButton = el.buttons.id('save');
+if (saveButton) saveButton.disabled = true;
+                `)}
+
+                <h4>Adding Your Own</h4>
+                <p>
+                    The great thing about the Elements service is that if you think there's an element missing, you can just go ahead and add it. Add a getter to ${inline('el')} in ${inline('src/services/elements.ts')} using ${inline('this.getElement()')} for one element or ${inline('this.getElements()')} for a list:
+                </p>
+                ${codeBlock(`
+export default class el extends BaseEl {
+    public static get docs() {
+        return this.getElement<HTMLElement>('el-docs');
+    }
+    public static get links() {
+        return this.getElements<HTMLAnchorElement>('a');
+    }
+};
+                `)}
+                <p>
+                    When you create a new page, you should create an element for that page. This element will follow the naming convention of ${inline('<el-docs>')} for a page named "Docs", and once you add the getter, you will be able to access that element in your TypeScript file by calling ${inline('el.docs')}. This will also make it easy for you to target that page in your CSS file by adding ${inline('el-docs')} in front of the target class or id, for example: ${inline('el-docs .content-slate')}.
+                </p>
+
+                <h4>Event Listeners</h4>
+                <p>
+                    ${inline('el.signal')} is an ${inline('AbortSignal')} that fires when the page goes away. Pass it to every ${inline('addEventListener()')} call and the listener cleans itself up, so you never have to remember to remove it:
+                </p>
+                ${codeBlock(`
+el.buttons.id('save')?.addEventListener('click', () => {
+    console.log('Saved!');
+}, { signal: el.signal });
+                `)}
+                <p>
+                    If you ever need to drop every one of those listeners early, ${inline('el.removeListeners()')} does it.
+                </p>
+
+                <h4>The Loader</h4>
+                <p>
+                    ${inline('el.loader')} is a special element that is used to display a loading spinner on the page. It works in tandem with the Request service to show up whenever a request is being made and disappear when the request is complete. If the loader is not currently on the page, it will show up if you simply reference it, and you can hide it again by calling ${inline('el.loader.remove()')}. It keeps count, too, so if three requests are running at once it stays up until the last one finishes.
                 </p>
                 <p>
-                    Each of these elements has the <code class="language-typescript">id()</code> method that allows you to access a single element by its id. If you don't use the <code class="language-typescript">id()</code> method, you will get a <code class="language-typescript">NodeListOf</code> of all the elements on the page that correspond to that tag.
+                    The loader is a ${inline('<loader>')} tag wrapped around a ${inline('<spinner>')} tag. ${inline('src/views/loader.css')} has some default styles for it, but you can change them to be whatever you want.
+                </p>
+
+                <h4>Attributes That Do Things</h4>
+                <p>
+                    A second after a page loads, ${inline('BaseEl')} looks for a few attributes and wires them up for you:
+                </p>
+                <ul>
+                    <li>${inline('bg')} sets the element's background image: ${inline('<div bg="/storage/images/forest.jpg"></div>')}</li>
+                    <li>${inline('light-box')} opens the element in a lightbox when it's clicked. On an ${inline('<img>')}, ${inline('<video>')}, or ${inline('<iframe>')} it uses the element's own ${inline('src')}. On anything else, put the URL in the attribute and say what kind it is: ${inline('<button light-box="/storage/trailer.mp4" light-box-type="video">')}.</li>
+                    <li>${inline('title')} shows its text for a few seconds when the element is tapped on a touch screen, since there's no hover there.</li>
+                </ul>
+                <p>
+                    It also warns you in the console if two elements share an id, because ${inline('id()')} can only ever find one of them.
+                </p>
+
+                <h4>Forms</h4>
+                <p>
+                    The last line of ${inline('main.ts')} is ${inline('new el()')}, and that sets up a few conveniences for forms:
+                </p>
+                <ul>
+                    <li>The submit button stays disabled until every ${inline('required')} input has something in it.</li>
+                    <li>Submitting a form disables the button and swaps its text for a spinner, so nobody double-submits.</li>
+                    <li>If someone leaves the page before submitting, what they typed is saved and filled back in when they come back. Inputs whose name starts with ${inline('_')}, and file inputs, are skipped.</li>
+                    <li>Options in a multi-select toggle on click, so nobody has to hold down Ctrl.</li>
+                </ul>
+                <p>
+                    Any of those can be deleted from the ${inline('BaseEl')} constructor if you'd rather have the browser's default behavior.
                 </p>
                 <p>
-                    There are some elements that are only single elements. These include:
-                    <ul>
-                        <li><code>el.body</code> for the <code class="language-html">${escapeHtml`<body>`}</code> element</li>
-                        <li><code>el.html</code> for the <code class="language-html">${escapeHtml`<html>`}</code> element</li>
-                        <li><code>el.root</code> for the root of the page</li>
-                        <li><code>el.title</code> for the <code class="language-html">${escapeHtml`<title>`}</code> element</li>
-                    </ul>
+                    ${inline('BaseEl')} also adds two methods to every string: ${inline('stripScripts()')} removes any ${inline('<script>')} tags, which is handy for anything typed into a form, and ${inline('doubleBreakDivs()')} cleans up the ${inline('<div>')} tags a ${inline('contenteditable')} element likes to add.
                 </p>
+
+                <h4>Logging In</h4>
                 <p>
-                    The great thing about the Elements service is that if you think there's an element mising, you can just go ahead and add it. Just add in a new getter and setter in the same way that the other elements are set up, and you're good to go. For example, when you create a new page, you should create an element for that page. This element will follow the naming convention of <code class="language-html">${escapeHtml`<el-docs>`}</code> for a page named "Docs", and once you add the getter and setter, you will be able to access that element in your TypeScript file by calling <code class="language-typescript">el.docs</code>. This will also make it easy for you to target that page in your CSS file by adding <code class="language-css">el-docs</code> in front of the target class or id, for example: <code class="language-css">el-docs .content-slate</code>.
-                </p>
-                <p>
-                    But now we're getting into how to organize Views, so let's get into that next. But before we do that, there is one essential part of the Elements service that is critical to making new views, and that is the <code class="language-typescript">html</code> function. Let's take a look at that next.
+                    ${inline('el.currentUser')}, ${inline('el.isAuth')}, ${inline('el.checkAuth()')}, and ${inline('el.checkAdmin()')} tell you who's logged in. They have <a href="/docs/login">their own page</a>.
                 </p>
 
                 <h4>Template Literals</h4>
                 <p>
-                    You'll notice there are no html files in Elemental except for the base <code class="language-plaintext">index.html</code> file. This is because Elemental uses tagged template literals to create the HTML for the page. This is a great way to keep the HTML and TypeScript together to make it easy to see what the HTML looks like when you're working in TypeScript.
+                    You'll notice there are no HTML files in Elemental except for the base ${inline('index.html')} file. This is because Elemental uses tagged template literals to create the HTML for the page. This is a great way to keep the HTML and TypeScript together to make it easy to see what the HTML looks like when you're working in TypeScript.
                 </p>
                 <p>
-                    Tagged template literals are a relatively new feature in JavaScript that allows you to take a literal string and parse it with a function. In this case, the <code class="language-typescript">html</code> function takes the string and returns an element. it works like this:
+                    Tagged template literals are a feature of JavaScript that allows you to take a literal string and parse it with a function. In this case, the ${inline('html')} function takes the string and returns an element. It lives in the Helpers service, and it works like this:
                 </p>
-                <pre>
-                    <code class="language-typescript">
-const myElement = html${escapeHtml`\``}<br>
-${escapeHtml`  <div>`}<br>
-${escapeHtml`    <p>My paragraph $\{including a variable}</p>`}<br>
-${escapeHtml`  </div>`}<br>
-${escapeHtml`\``};
-                    </code>
-                </pre>
+                ${codeBlock(`
+import Helpers from '@services/helpers';
+
+const html = Helpers.html;
+
+const myElement = html\`
+    <div>
+        <p>My paragraph \${includingAVariable}</p>
+    </div>
+\`;
+                `)}
                 <p>
-                    As you can see, a tagged template literal is used by immediately following the function name with a tick mark. In the Elements service, that function looks like this:
+                    As you can see, a tagged template literal is used by immediately following the function name with a tick mark. In the Helpers service, that function looks like this:
                 </p>
-                <pre>
-                    <code class="language-typescript">
-export function html(html: TemplateStringsArray, ...values: any[]): HTMLElement {<br>
-&nbsp;&nbsp;let string: string = '';<br>
-&nbsp;&nbsp;html.forEach((str, i) => string += str + (values[i] ?? ''));<br>
-&nbsp;&nbsp;const template = document.createElement('template');<br>
-&nbsp;&nbsp;template.innerHTML = string.trim();<br>
-&nbsp;&nbsp;return template.content.firstChild as HTMLElement;<br>
+                ${codeBlock(`
+public static html(html: TemplateStringsArray, ...values: any[]): HTMLElement {
+    let string: string = '';
+    html.forEach((str, i) => string += str + (values[i] ?? ''));
+    const template = document.createElement('template');
+    template.innerHTML = string.trim();
+    return template.content.firstChild as HTMLElement;
 }
-                    </code>
-                </pre>
+                `)}
                 <p>
-                    The <code class="language-typescript">html</code> parameter is a <code class="language-typescript">TemplateStringsArray</code>, which is an array of strings that are the literal parts of the template literal divided by the values that are passed in by the <code class="language-typescript">${escapeHtml`$\{\}`}</code>. The <code class="language-typescript">values</code> parameter is a rest parameter that takes all the values that are passed into the template literal. The function then loops through the <code class="language-typescript">html</code> array and adds the literal parts of the template literal to the <code class="language-typescript">string</code> variable. If there are values passed in, it adds those as well. It then creates a <code class="language-typescript">template</code> element, sets the <code class="language-typescript">innerHTML</code> to the <code class="language-typescript">string</code> variable, and returns the first child of the <code class="language-typescript">content</code> property of the <code class="language-typescript">template</code> element as an <code class="language-typescript">HTMLElement</code>.
+                    The ${inline('html')} parameter is a ${inline('TemplateStringsArray')}, which is an array of strings that are the literal parts of the template literal divided by the values that are passed in by the ${inline('${}')}. The ${inline('values')} parameter is a rest parameter that takes all the values that are passed into the template literal. The function then loops through the ${inline('html')} array and adds the literal parts of the template literal to the ${inline('string')} variable. If there are values passed in, it adds those as well. It then creates a ${inline('template')} element, sets the ${inline('innerHTML')} to the ${inline('string')} variable, and returns the first child of the ${inline('content')} property of the ${inline('template')} element as an ${inline('HTMLElement')}.
                 </p>
                 <p>
-                    Template literal tags are not a part of the Elements object, so you'll have to import the <code class="language-typescript">html</code> function at the top of your TypeScript file with <code class="language-typescript">import { html } from '@services/elements';</code>. You can also import the <code class="language-typescript">escapeHtml</code> function in the same way. This tag allows you to type out HTML that will be interpreted as a string and not as actual HTML.
+                    One thing to be careful about: ${inline('html')} drops your values straight into the HTML. That's what you want for your own markup, but never put something a user typed in there, or they can put their own HTML (and scripts) on your page. Set user content with ${inline('textContent')} after the element is built instead:
+                </p>
+                ${codeBlock(`
+const comment = html\`<p class="comment"></p>\`;
+comment.textContent = userComment;
+                `)}
+                <p>
+                    There's also ${inline('Helpers.escapeHtml')}, which turns a template into a string with the HTML escaped, so it shows up on the page as text instead of being treated as markup.
                 </p>
                 <p>
-                    You can learn more about tagged template literals <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates" target="_blank">here</a>. But now that you have a basic idea of how they work here in Elemental, we can move on to <a href="/docs/views">creating Views</a>!
+                    You can learn more about tagged template literals <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates" target="_blank">here</a>. But now that you have a basic idea of how they work here in Elemental, we can move on to creating <a href="/docs/views">Views</a>!
                 </p>
             </section>
         </div>
     </el-docs>
 `;
+
 export default elementsTemplate;

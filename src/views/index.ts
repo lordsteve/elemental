@@ -10,6 +10,10 @@ import docsTemplate from './docs/docs.template';
 import sidebar from './sidebar/sidebar.ctrl';
 import sidebarTemplate from './sidebar/sidebar.template';
 import githubButtonTemplate from './github-button/githubButton.template';
+import lightbox from './lightbox/lightbox.ctrl';
+import lightboxTemplate from './lightbox/lightbox.template';
+import cookieBanner from './cookieBanner/cookieBanner.ctrl';
+import cookieBannerTemplate from './cookieBanner/cookieBanner.template';
 
 export { default as about } from '@views/about/about.ctrl';
 export { default as aboutTemplate } from '@views/about/about.template';
@@ -23,6 +27,10 @@ export { default as docsTemplate } from './docs/docs.template';
 export { default as sidebar } from './sidebar/sidebar.ctrl';
 export { default as sidebarTemplate } from './sidebar/sidebar.template';
 export { default as githubButtonTemplate } from './github-button/githubButton.template';
+export { default as lightbox } from './lightbox/lightbox.ctrl';
+export { default as lightboxTemplate } from './lightbox/lightbox.template';
+export { default as cookieBanner } from './cookieBanner/cookieBanner.ctrl';
+export { default as cookieBannerTemplate } from './cookieBanner/cookieBanner.template';
 
 const views = {
     home,
@@ -36,6 +44,10 @@ const views = {
     docs,
     docsTemplate,
     DocsRoutes,
-    githubButtonTemplate
+    githubButtonTemplate,
+    lightbox,
+    lightboxTemplate,
+    cookieBanner,
+    cookieBannerTemplate
 };
 export default views;

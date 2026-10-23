@@ -1,18 +1,18 @@
-import { html, htmlstring } from '@services/elements';
+import Helpers from '@services/helpers';
 import sidebarTemplate from '@views/sidebar/sidebar.template';
 
 const homeTemplate = (
     heading: string,
     welcome: string | null = null
 ) => {
-    welcome = !welcome ? '' : htmlstring`<p>${welcome}</p>`;
+    welcome = !welcome ? '' : `<p>${welcome}</p>`;
     const sidebar = sidebarTemplate({
         '/':'Home',
         '/about':'About',
         '/docs':'Docs'
     }).outerHTML;
 
-    return html`
+    return Helpers.html`
         <el-home>
             ${sidebar}
             <div class="content-slate">

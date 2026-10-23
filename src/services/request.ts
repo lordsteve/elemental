@@ -1,31 +1,49 @@
-import el from '@services/elements';
+import el from '@elements';
+import CookieJar from './cookieJar';
 
 export function initLoader() {
+    el.loader;
     window.fetch = ((oldFetch: typeof window.fetch, input: RequestInfo | URL = '', init?: RequestInit | undefined) => {
         return async (url: RequestInfo | URL = input, options: RequestInit | undefined = init) => {
             el.loader;
-            if (options && options.method !== 'GET') {
-                el.csrfToken = await oldFetch('/csrf-token').then(response => response.text());
-                options.headers
-                    ? options.headers['X-CSRF-TOKEN' as keyof HeadersInit] = el.csrfToken
-                    : Object.assign(options, { headers: { 'X-CSRF-TOKEN': el.csrfToken } });
+            if (options && options.method && options.method !== 'GET') {
+                if (!el.csrfToken) {
+                    const cookieToken = CookieJar.get<string>('csrfToken');
+                    if (typeof cookieToken === 'string' && cookieToken) {
+                        el.csrfToken = cookieToken;
+                    } else {
+                        el.csrfToken = await oldFetch('/csrf-token').then(response => response.text());
+                    }
+                }
+                if (!options.headers) {
+                    options.headers = { 'X-CSRF-TOKEN': el.csrfToken };
+                } else if (options.headers instanceof Headers) {
+                    options.headers.set('X-CSRF-TOKEN', el.csrfToken);
+                } else if (Array.isArray(options.headers)) {
+                    options.headers.push(['X-CSRF-TOKEN', el.csrfToken]);
+                } else {
+                    (options.headers as Record<string, string>)['X-CSRF-TOKEN'] = el.csrfToken;
+                }
+            }
+            if (el.sessionKey) {
+                if (options && options.headers) Object.assign(options.headers, { 'Authorization': el.sessionKey });
+                else if (options) options.headers = { 'Authorization': el.sessionKey } as HeadersInit;
+                else options = { headers: { 'Authorization': el.sessionKey } } as RequestInit;
             }
             if (options && options.headers) Object.assign(options.headers, { 'X-Requested-With': 'Elemental' });
             if (!options) options = { headers: { 'X-Requested-With': 'Elemental' } } as RequestInit;
             if (!options.headers) options.headers = { 'X-Requested-With': 'Elemental' } as HeadersInit;
-            const response = await oldFetch(url, options);
-            el.loader.remove();
-            return response;
+            return oldFetch(url, options).then((resp) => {
+                el.loader.remove();
+                if (resp.status === 403) {
+                    el.csrfToken = '';
+                }
+                if (!resp.ok) return resp.json().then(err => { throw err; });
+                return resp;
+            });
         }
     })(window.fetch);
-
-    window.onload = ((oldLoad: typeof window.onload | undefined) => {
-        el.loader;
-        return (e) => {
-            if (!!oldLoad) oldLoad.call(window, e);
-            el.loader.remove();
-        }
-    })(window.onload?.bind(window));
+    window.addEventListener('load', () => el.loader.remove(), { signal: el.signal });
 }
 
 export default async function request<T = Response>(
@@ -33,33 +51,33 @@ export default async function request<T = Response>(
     path: string,
     data: RequestData | object | null = null,
     evalResult = true,
- ): Promise<T extends Response ? Response : T> {
+): Promise<T extends Response ? Response : T> {
     let payLoad: RequestInit | undefined = undefined;
 
-    if (method !== 'GET') payLoad = {
+    if (method !== 'GET') payLoad = Object.assign(payLoad ?? {}, {
         method,
-        headers: {
+        headers: data instanceof FormData ? undefined : {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         } as HeadersInit,
-        body: JSON.stringify(data) as BodyInit,
-    };
+        body: data instanceof FormData ? data : JSON.stringify(data) as BodyInit,
+    });
 
-    const routePostfix = await getPostfix(method, data as RequestData | null);
+    const routePostfix = getPostfix(method, data);
 
     const response = await fetch(`${path}${routePostfix}`, payLoad);
 
     return evalResult
-        ? response.json().then(obj => obj as T extends Response ? Response : T)
+        ? await response.json().then((obj: T extends Response ? Response : T) => obj)
         : response as T extends Response ? Response : T;
 }
 
-async function getPostfix(method: string, data: RequestData | null = null) {
+function getPostfix(method: string, data: RequestData | object | null = null) {
     let postfix = '';
     if (data && method === 'GET') {
         const params = new URLSearchParams();
         Object.keys(data).forEach(key => {
-            params.append(key, data[key].toString());
+            params.append(key, (data as RequestData)[key].toString());
         });
         postfix = `?${params.toString()}`;
     }
@@ -82,7 +100,7 @@ export async function get<T = Response>(path: string, data: RequestData | null =
 export async function getHtml<T extends HTMLElement | NodeListOf<HTMLElement>>(path: string, data: RequestData | null = null) {
     return await request('GET', path, data, false)
         .then(response => response.text())
-        .then(html => { 
+        .then(html => {
             const ele = new DOMParser().parseFromString(html, 'text/html').body.childNodes;
             var result = ele.length === 1 ? ele[0] as T : ele as NodeList;
             return result as T;
@@ -97,9 +115,25 @@ export async function put<T = Response>(path: string, data: RequestData | object
     return await request<T>('PUT', path, data);
 }
 
-export async function del<T = Response>(path: string, data: RequestData | null = null) {
+export async function del<T = Response>(path: string, data: RequestData | object | null = null) {
     return await request<T>('DELETE', path, data, false);
 }
 
+export async function getData<T = Response>(path: string, data: RequestData | null = null) {
+    return await request<T>('GET', `/data${path}`, data);
+}
+
+export async function postData<T = Response>(path: string, data: RequestData | object | null = null) {
+    return await request<T>('POST', `/data${path}`, data);
+}
+
+export async function putData<T = Response>(path: string, data: RequestData | object | null = null) {
+    return await request<T>('PUT', `/data${path}`, data);
+}
+
+export async function delData<T = Response>(path: string, data: RequestData | object | null = null) {
+    return await request<T>('DELETE', `/data${path}`, data, false);
+}
+
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
-type RequestData = { [key: string]: string | boolean | number };
+class RequestData { [key: string]: string | boolean | number };

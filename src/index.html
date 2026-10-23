@@ -2,7 +2,6 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="csrf-token" content="">
         <title>App</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <meta name="HandheldFriendly" content="true">
@@ -19,9 +18,20 @@
                 });
             });
         </script>
-        <link rel="stylesheet" href="main.css">
+        <script>
+        // Runs before the stylesheet so dark mode never flashes light first.
+        // A saved choice from the nav toggle wins over the device setting.
+        (function () {
+            var theme;
+            try { theme = localStorage.getItem('theme'); } catch (e) { }
+            if (theme !== 'light' && theme !== 'dark')
+                theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            document.documentElement.dataset.theme = theme;
+        })();
+        </script>
+        <link rel="stylesheet" href="/main.css">
     </head>
     <body>
     </body>
-    <script src="main.js"></script>
+    <script src="/main.js"></script>
 </html>

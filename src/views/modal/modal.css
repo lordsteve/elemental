@@ -1,0 +1,42 @@
+el-modal {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(10px);
+    background-color: var(--backdrop);
+}
+el-modal > div {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: var(--lg-shadow);
+}
+el-modal div header {
+    display: flex;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    background: var(--ui-color);
+    color: var(--text-on-accent);
+    padding: .5rem 1rem;
+}
+el-modal div header span {
+    flex-grow: 1;
+}
+el-modal div header button span {
+    color: var(--text-on-accent);
+}
+el-modal div modal-body {
+    padding: 1rem;
+}
+el-modal button:not(.close-button) {
+    border-radius: var(--radius-lg);
+    padding: 0.5rem 1rem;
+    background-color: var(--ui-color);
+    color: var(--text-on-accent);
+    border: 1px solid var(--border-strong);
+}
