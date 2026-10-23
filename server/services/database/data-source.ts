@@ -5,8 +5,8 @@ import { DataSource } from "typeorm";
 if (!process.env.DB_HOST) require("dotenv").config();
 
 /**
- * The database is optional: without DB_HOST the server still runs, and
- * features that need it (like logging in) answer 503 instead.
+ * The database is optional: without DB_HOST the server still runs, it just
+ * doesn't connect to one.
  */
 export const isDatabaseConfigured = !!process.env.DB_HOST;
 

@@ -6,28 +6,13 @@ export class User {
     @PrimaryGeneratedColumn()
     id!: number
 
-    @Column({ default: '' })
+    @Column()
     public firstName!: string
 
-    @Column({ default: '' })
+    @Column()
     public lastName!: string
 
-    @Column({ default: 0 })
+    @Column()
     public age!: number
-
-    @Column({ default: '' })
-    public username!: string
-
-    @Column({ default: '' })
-    public discord_id!: string
-
-    @Column({ default: '' })
-    public email!: string
-
-    @Column({ default: '' })
-    public profilePicture!: string
-
-    @Column({ default: false })
-    public isAdmin!: boolean
 
 }

@@ -30,10 +30,9 @@ With `ENV=development` in `.env`, the server starts browser-sync and opens a tab
 - **Views**: templates written as `html` tagged template literals, with a controller and a stylesheet next to each one
 - **Routes**: a front-end `Routes` class that maps the URL to a view, and a server `Routes` class for your `/data/` API
 - **The Elements service** (`el`): getters for the elements on the page, a loading spinner, and listeners that clean up after themselves
-- **The Request service**: `fetch` with CSRF tokens, the session key, and the loader already handled
+- **The Request service**: `fetch` with CSRF tokens and the loader already handled
 - **A Node server** with CSRF protection and no framework underneath
 - **A database, if you want one**: [TypeORM](https://typeorm.io/) with migrations, set up for MySQL. Without `DB_HOST`, the server runs without one.
-- **Logging in with Discord**, with sessions that survive restarts. It turns on once there's a database and a Discord application.
 - **Light and dark mode**, following the device's setting, with a toggle in the nav
 
 ### Where things are

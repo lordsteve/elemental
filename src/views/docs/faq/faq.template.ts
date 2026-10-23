@@ -11,7 +11,7 @@ const faqTemplate = () => html`
 
                 <h4>Do I need a database?</h4>
                 <p>
-                    Nope. Leave ${inline('DB_HOST')} out of your ${inline('.env')} file and the server runs without one. The only thing that needs it out of the box is <a href="/docs/login">logging in</a>. These docs run without one.
+                    Nope. Leave ${inline('DB_HOST')} out of your ${inline('.env')} file and the server runs without one. These docs run without one.
                 </p>
 
                 <h4>Why does my POST (or PUT, or DELETE) get a 403 Forbidden?</h4>

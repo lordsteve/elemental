@@ -33,9 +33,6 @@ export function initLoader() {
                 }
                 // ...adds the token as an X-CSRF-TOKEN header...
             }
-            if (el.sessionKey) {
-                // ...adds the session key as an Authorization header...
-            }
             // ...adds an X-Requested-With: Elemental header...
             return oldFetch(url, options).then((resp) => {
                 el.loader.remove();
@@ -56,7 +53,6 @@ export function initLoader() {
                 <ul>
                     <li>The loader shows up while the request is running and goes away when it's done.</li>
                     <li>Anything that isn't a GET carries a CSRF token. The server hands one out in a cookie on your first visit, so usually it's already there. If it isn't, ${inline('initLoader')} asks ${inline('/csrf-token')} for one. If the server ever turns the token down with a 403, it's thrown out so the next request fetches a fresh one.</li>
-                    <li>If somebody's <a href="/docs/login">logged in</a>, their session key goes along in the ${inline('Authorization')} header, so the server knows who's asking.</li>
                     <li>Every request carries an ${inline('X-Requested-With: Elemental')} header. The server won't hand out anything from ${inline('/views/')} without it.</li>
                     <li>If the server answers with an error, the promise rejects with whatever the server sent back, so you can ${inline('catch')} it and show it.</li>
                 </ul>

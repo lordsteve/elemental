@@ -23,7 +23,7 @@ npm run dev
                     You're going to need git and Node.js installed on your machine to start. You can download git from <a href="https://git-scm.com/downloads" target="_blank">git-scm.com</a> and Node.js from <a href="https://nodejs.org/en/download/" target="_blank">nodejs.org</a>. Go with a current LTS version of Node (22 or newer).
                 </p>
                 <p>
-                    That's all you need to get a site running. Two other things are optional, and you can add them whenever you're ready: a MySQL database, if your app needs to store anything, and a Discord application, if you want people to be able to log in. Elemental runs just fine without either one.
+                    That's all you need to get a site running. If your app needs to store anything, you can add a MySQL database whenever you're ready, but Elemental runs just fine without one.
                 </p>
 
                 <h4>Installation</h4>
@@ -58,7 +58,7 @@ HOST=localhost
 RELOAD_PORT=8080
                 `, 'plaintext')}
                 <p>
-                    ${inline('ENV=development')} turns on live reloading. Leave it out in production. The ${inline('DB_')} variables are for the database and the ${inline('DISCORD_')} ones are for logging in. You can leave those alone until you need them. Without ${inline('DB_HOST')}, the server simply runs without a database, and logging in is switched off. There's more on both in <a href="/docs/the-server">The Server</a> and <a href="/docs/login">Logging In</a>.
+                    ${inline('ENV=development')} turns on live reloading. Leave it out in production. The ${inline('DB_')} variables are for the database, and you can leave them alone until you need one. Without ${inline('DB_HOST')}, the server simply runs without a database. There's more on that in <a href="/docs/the-server">The Server</a>.
                 </p>
                 <p>
                     Never commit your ${inline('.env')} file. It's already in ${inline('.gitignore')}, so you'd have to work at it.

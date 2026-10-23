@@ -46,13 +46,6 @@ export default class DocsRoutes extends Routes {
         views.docs();
     }
 
-    ['login']() {
-        el.body.appendChild(
-            views.docsTemplate.loginTemplate()
-        );
-        views.docs();
-    }
-
     ['faq']() {
         el.body.appendChild(
             views.docsTemplate.faqTemplate()

@@ -20,7 +20,7 @@ const theServer = () => html`
                     Start at the bottom of the file, with ${inline('startServer()')}. If ${inline('ENV')} is ${inline('development')}, the server doesn't serve anything itself at first. It starts browser-sync and nodemon, and nodemon starts a second copy of the server that does the actual serving. That's what gets you the page reloading and the server restarting while you work.
                 </p>
                 <p>
-                    The copy that does the serving checks for a database next. If ${inline('DB_HOST')} is set, it connects to the database, and if that fails, it stops right there, because a server that thinks it has a database and doesn't is worse than one that never had one. Once it's connected, it loads everyone's login sessions back into memory. If ${inline('DB_HOST')} isn't set, it says so in the console and carries on without one. Then it starts listening on ${inline('PORT')}.
+                    The copy that does the serving checks for a database next. If ${inline('DB_HOST')} is set, it connects to the database, and if that fails, it stops right there, because a server that thinks it has a database and doesn't is worse than one that never had one. If ${inline('DB_HOST')} isn't set, it says so in the console and carries on without one. Then it starts listening on ${inline('PORT')}.
                 </p>
 
                 <h4>Follow the Data</h4>
@@ -84,7 +84,7 @@ private ['/get-data'](req: http.IncomingMessage, res: http.ServerResponse): Resp
 }
                 `)}
                 <p>
-                    ${inline('headerName')} is for the odd response that needs a header other than ${inline('Content-Type')}. A redirect, for example, is a 301 status with ${inline("headerName: 'Location'")} and the address in ${inline('header')}. That's how logging in sends the browser back to your site.
+                    ${inline('headerName')} is for the odd response that needs a header other than ${inline('Content-Type')}. A redirect, for example, is a 301 status with ${inline("headerName: 'Location'")} and the address in ${inline('header')}.
                 </p>
 
                 <h4>Controllers</h4>
@@ -97,23 +97,26 @@ private ['/get-data'](req: http.IncomingMessage, res: http.ServerResponse): Resp
                     <li>${inline('checkAndMakeChanges(obj, newObj)')} copies over whatever changed and tells you whether anything did, so you only save to the database when you need to.</li>
                 </ul>
                 <p>
-                    From there you can just build your own methods based on whatever it is that you need the app to do. If a route should only work for someone who's logged in, ask ${inline('SessionController')} who's asking:
+                    From there you can just build your own methods based on whatever it is that you need the app to do. A method that saves something might look like this:
                 </p>
                 ${codeBlock(`
 public static async saveLink(req: http.IncomingMessage, res: http.ServerResponse) {
-    const currentUser = SessionController.getUser(req);
-    if (!currentUser?.isAdmin) {
+    const body = await this.readBody<Link>(req);
+    if (!body?.url) {
         return {
-            response: JSON.stringify('Unauthorized'),
-            status: 401
+            response: JSON.stringify('A URL is required'),
+            status: 400
         };
     }
-    const body = await this.readBody<Link>(req);
-    // ...save it...
+    const link = await AppDataSource.getRepository(Link).save(body);
+    return {
+        response: JSON.stringify(link),
+        status: 201
+    };
 }
                 `)}
                 <p>
-                    Always check on the server. Hiding a button in the front end keeps it out of sight, but anyone can still send the request. There's more on that in <a href="/docs/login">Logging In</a>.
+                    Add a route for it in ${inline('server/routes.ts')} and it's ready for ${inline("postData('/save-link', link)")}. Check what comes in, too. Anybody can send your server a request, so don't trust the body just because your own page usually sends it.
                 </p>
 
                 <h4>HTML From the Server</h4>
@@ -123,7 +126,7 @@ public static async saveLink(req: http.IncomingMessage, res: http.ServerResponse
 
                 <h4>The Cache</h4>
                 <p>
-                    ${inline('server/cache.ts')} is a single NodeCache that the whole server shares. It's where the CSRF tokens and login sessions live while the server is running, and you can use it too: ${inline("cache.set('key', value, seconds)")} and ${inline("cache.get('key')")}. Just remember it's only memory, so it's empty again after a restart. Anything that has to survive one belongs in the database.
+                    ${inline('server/cache.ts')} is a single NodeCache that the whole server shares. It's where the CSRF tokens live while the server is running, and you can use it too: ${inline("cache.set('key', value, seconds)")} and ${inline("cache.get('key')")}. Just remember it's only memory, so it's empty again after a restart. Anything that has to survive one belongs in the database.
                 </p>
 
                 <h4>The Database</h4>
@@ -154,7 +157,7 @@ npm run migration:revert
                     The first one compares your entities to the database and writes a migration file in ${inline('server/services/database/migration')} with the changes. The second one applies any migrations that haven't been run yet. And if you mess it up, the third one undoes the last migration. Run ${inline('migration:run')} on your production database before you deploy code that needs the change, or the new code will go looking for tables and columns that aren't there yet.
                 </p>
                 <p>
-                    Elemental comes with two migrations already, for the ${inline('user')} and ${inline('user_session')} tables that <a href="/docs/login">logging in</a> uses.
+                    Elemental comes with an example ${inline('User')} entity and the migration that creates its table, so you can see what both look like.
                 </p>
             </section>
         </div>

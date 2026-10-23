@@ -25,11 +25,6 @@ export function initLoader() {
                     (options.headers as Record<string, string>)['X-CSRF-TOKEN'] = el.csrfToken;
                 }
             }
-            if (el.sessionKey) {
-                if (options && options.headers) Object.assign(options.headers, { 'Authorization': el.sessionKey });
-                else if (options) options.headers = { 'Authorization': el.sessionKey } as HeadersInit;
-                else options = { headers: { 'Authorization': el.sessionKey } } as RequestInit;
-            }
             if (options && options.headers) Object.assign(options.headers, { 'X-Requested-With': 'Elemental' });
             if (!options) options = { headers: { 'X-Requested-With': 'Elemental' } } as RequestInit;
             if (!options.headers) options.headers = { 'X-Requested-With': 'Elemental' } as HeadersInit;
