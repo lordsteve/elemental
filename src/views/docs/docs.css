@@ -18,3 +18,48 @@ el-docs .content-slate section > ul,
 el-docs .content-slate section > ol {
     align-self: stretch;
 }
+
+/* The docs scroll inside the content slate, so that's where smooth scrolling goes */
+el-docs .content-slate {
+    scroll-behavior: smooth;
+}
+el-docs h2,
+el-docs h4 {
+    scroll-margin-top: 1rem;
+}
+
+el-docs nav.page-links {
+    align-self: stretch;
+    border-left: 4px solid var(--ui-color);
+    padding: 0.25rem 1rem;
+    margin-bottom: 1rem;
+    /* undo the site nav's styles, which target every nav */
+    box-shadow: none;
+    width: auto;
+}
+el-docs nav.page-links p {
+    margin: 0 0 0.25rem;
+    font-weight: bold;
+    color: var(--text-muted);
+}
+el-docs nav.page-links ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 0.25rem 1.25rem;
+    background-color: transparent;
+    overflow: visible;
+}
+el-docs nav.page-links a {
+    color: var(--ui-text);
+    padding: 0;
+    text-align: left;
+    display: inline;
+}
+el-docs nav.page-links a:hover {
+    color: var(--ui-text);
+    background-color: transparent;
+}

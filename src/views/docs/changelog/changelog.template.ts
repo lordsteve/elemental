@@ -48,6 +48,7 @@ const changelogTemplate = () => html`
                 <ul>
                     <li>Every page rewritten to match the code as it is now, and the FAQ finally has questions in it.</li>
                     <li>Code samples are escaped properly, and text and code fill the page instead of being squeezed into the middle.</li>
+                    <li>Each page has links to its sections at the top, and links like ${inline('/docs/views#controller')} open right at that section.</li>
                     <li>This changelog.</li>
                 </ul>
 
