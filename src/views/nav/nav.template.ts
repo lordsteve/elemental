@@ -10,6 +10,7 @@ const navTemplate = () => html`
             <li><a href="/">Home</a></li>
             <li><a href="/about">About</a></li>
             <li><a href="/docs">Docs</a></li>
+            <li><a href="/contact">Contact</a></li>
             <li>
                 <button id="theme-toggle" title="${currentTheme() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}">
                     <i class="fa-solid ${currentTheme() === 'dark' ? 'fa-sun' : 'fa-moon'}"></i>

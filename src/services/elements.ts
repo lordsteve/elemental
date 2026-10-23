@@ -14,6 +14,9 @@ export default class el extends BaseEl {
     public static get about() {
         return this.getElement<HTMLElement>('el-about');
     }
+    public static get contact() {
+        return this.getElement<HTMLElement>('el-contact');
+    }
     public static get docs() {
         return this.getElement<HTMLElement>('el-docs');
     }

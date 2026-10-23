@@ -58,7 +58,7 @@ HOST=localhost
 RELOAD_PORT=8080
                 `, 'plaintext')}
                 <p>
-                    ${inline('ENV=development')} turns on live reloading. Leave it out in production. The ${inline('DB_')} variables are for the database, and you can leave them alone until you need one. Without ${inline('DB_HOST')}, the server simply runs without a database. There's more on that in <a href="/docs/the-server">The Server</a>.
+                    ${inline('ENV=development')} turns on live reloading. Leave it out in production. The ${inline('DB_')} variables are for the database, and you can leave them alone until you need one. Without ${inline('DB_HOST')}, the server simply runs without a database. The ${inline('EMAIL_')} variables and ${inline('CONTACT_EMAIL')} are for sending email and the contact form, and they're optional too. There's more on all of them in <a href="/docs/the-server">The Server</a>.
                 </p>
                 <p>
                     Never commit your ${inline('.env')} file. It's already in ${inline('.gitignore')}, so you'd have to work at it.

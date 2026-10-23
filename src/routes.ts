@@ -19,4 +19,9 @@ export default class Routes extends RoutesBase {
         }
     }
 
+    ['contact']() {
+        el.body.appendChild(views.contactTemplate());
+        views.contact();
+    }
+
 }

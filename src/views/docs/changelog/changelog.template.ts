@@ -35,6 +35,7 @@ const changelogTemplate = () => html`
                     <li>A lightbox, a cookie banner, and modals loaded from the server.</li>
                     <li>${inline('headerName')} in server responses, for headers other than ${inline('Content-Type')}, like a redirect's ${inline('Location')}.</li>
                     <li>A shared server cache in ${inline('server/cache.ts')}.</li>
+                    <li>An ${inline('EmailService')} for sending email, and a contact page whose form emails you, with spam protection built in.</li>
                     <li>${inline('checkAndMakeChanges()')} in ${inline('BaseController')}, and ${inline('readBody()')} can hand back the raw body.</li>
                     <li>CSS variables for the colors, corner sizes, and stacking order used across the site.</li>
                 </ul>
