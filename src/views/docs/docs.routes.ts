@@ -1,4 +1,4 @@
-import el from '@services/elements';
+import el from '@elements';
 import views from '@views';
 import Routes from '@routes';
 
@@ -42,6 +42,13 @@ export default class DocsRoutes extends Routes {
     ['the-server']() {
         el.body.appendChild(
             views.docsTemplate.theServer()
+        );
+        views.docs();
+    }
+
+    ['login']() {
+        el.body.appendChild(
+            views.docsTemplate.loginTemplate()
         );
         views.docs();
     }

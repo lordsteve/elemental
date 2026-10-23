@@ -1,6 +1,6 @@
 el-sidebar {
-    background-color: #333;
-    color: #fff;
+    background-color: var(--sidebar-bg);
+    color: var(--text-on-accent);
     overflow: auto;
 }
 
@@ -28,13 +28,13 @@ el-sidebar li {
 el-sidebar a {
     display: block;
     padding: 14px 16px;
-    color: #fff;
+    color: var(--text-on-accent);
     text-decoration: none;
 }
 
 el-sidebar a:hover {
-    color: #fff;
-    background-color: #0000005e;
+    color: var(--text-on-accent);
+    background-color: var(--sidebar-hover);
 }
 
 @media screen and (min-width: 768px) {

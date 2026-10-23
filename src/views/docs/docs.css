@@ -11,3 +11,10 @@ el-docs {
     }
     
 }
+/* The shared section centers its children; reading text and code fill it instead */
+el-docs .content-slate section > p,
+el-docs .content-slate section > pre,
+el-docs .content-slate section > ul,
+el-docs .content-slate section > ol {
+    align-self: stretch;
+}

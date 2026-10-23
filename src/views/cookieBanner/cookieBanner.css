@@ -1,0 +1,25 @@
+el-cookie-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--scrim);
+    color: var(--text-on-accent);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: var(--z-overlay);
+}
+el-cookie-banner p {
+    margin: 1rem;
+    font-size: 1rem;
+}
+el-cookie-banner button {
+    margin-right: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: var(--cookie-accept);
+    color: var(--text-on-accent);
+    border-radius: var(--radius);
+    font-size: 1rem;
+    white-space: nowrap;
+}

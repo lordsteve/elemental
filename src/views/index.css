@@ -5,6 +5,9 @@
 @import url('./sidebar/sidebar.css');
 @import url('./docs/docs.css');
 @import url('./github-button/githubButton.css');
+@import url('./lightbox/lightbox.css');
+@import url('./cookieBanner/cookieBanner.css');
+@import url('./modal/modal.css');
 /* You can delete the next line if you don't need syntax highlighting */
 /* and you can also get rid of the associated file */
 @import url('./dracula.css');

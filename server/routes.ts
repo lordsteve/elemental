@@ -1,19 +1,57 @@
-import Controller from 'controllers/baseController';
+import BaseController from 'controllers/baseController';
+import SessionController from 'controllers/sessionController';
 import http from 'http';
 
 export default class Routes {
     private url: string;
     constructor(
-        public req: http.IncomingMessage, 
+        public req: http.IncomingMessage,
         public res: http.ServerResponse
     ) {
         this.url = req.url?.replace(/\/data\//, '/') ?? '';
         this.url = this.url.split('?')[0];
     }
 
+    // An example route: GET /data/get-data
     @Method('GET')
-    private ['/get-recipes'](req: http.IncomingMessage, res: http.ServerResponse): ResponsePromise {
-        return Controller.getData(req, res)
+    private ['/get-data'](req: http.IncomingMessage, res: http.ServerResponse): ResponsePromise {
+        return BaseController.getData(req, res);
+    }
+
+    // Discord login and sessions
+    @Method('GET')
+    private ['/get-discord-creds'](req: http.IncomingMessage, res: http.ServerResponse): ResponsePromise {
+        return SessionController.getDiscordCreds(req, res);
+    }
+
+    @Method('GET')
+    private ['/auth-redirect'](req: http.IncomingMessage, res: http.ServerResponse): ResponsePromise {
+        return SessionController.loginDiscord(req, res);
+    }
+
+    @Method('GET')
+    private ['/check-auth'](req: http.IncomingMessage, res: http.ServerResponse): ResponsePromise {
+        const isAuth = SessionController.checkAuth(req);
+        return Promise.resolve({
+            response: isAuth.toString(),
+            header: 'application/json',
+            status: 200
+        });
+    }
+
+    @Method('GET')
+    private ['/start'](req: http.IncomingMessage, res: http.ServerResponse): ResponsePromise {
+        return SessionController.startNewSession(req, res);
+    }
+
+    @Method('GET')
+    private ['/logout'](req: http.IncomingMessage, res: http.ServerResponse): ResponsePromise {
+        SessionController.logout(req);
+        return Promise.resolve({
+            response: JSON.stringify('Logged out'),
+            header: 'text/plain',
+            status: 200
+        });
     }
 
     get response(): ResponsePromise {
@@ -34,14 +72,15 @@ type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
 type RouteFunction = (req: http.IncomingMessage, res: http.ServerResponse) => ResponsePromise;
 type ResponsePromise = Promise<{
     response: any;
-    header: string;
+    headerName?: string | undefined;
+    header?: string | undefined;
     status: number;
 }>;
 
 function Method(method: Method) {
-    return function(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+    return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
         const originalMethod: RouteFunction = descriptor.value;
-        descriptor.value = function(req: http.IncomingMessage, res: http.ServerResponse) {
+        descriptor.value = function (req: http.IncomingMessage, res: http.ServerResponse) {
             if (typeof originalMethod !== 'function') {
                 return {
                     response: '404 Not Found',
